@@ -1,5 +1,5 @@
 /*
-** This is my own version of Good ol    ' Blasteroids
+** This is my own version of Good ol' Blasteroids
 ** This is built only using the C standard library and the Allegro 5 framework
 */
 #include <stdio.h>
@@ -11,12 +11,8 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_font.h>
-
-/* The dimensions for the game's display window */
-typedef struct {
-    const int width;
-    const int height;
-} MainWindow;
+#include "gameObjects.h"
+// #include "renderFunctions.h"
 
 /* Basic error handler */
 void error(char* err)
@@ -37,12 +33,12 @@ int main(int argc, char** argv)
         error("Can't initialize primtives addon");
     if (!al_init_font_addon())
         error("Can't initialize font addon");
-    if (!al_init_acodec_addon())
-        error("Can't initialize acodec addon");
-    if (!al_install_audio())
-        error("Can't initialize audio addon");
-    if (!al_reserve_samples(16))
-        error("Can't reserve audio samples");
+    // if (!al_init_acodec_addon())
+    //     error("Can't initialize acodec addon");
+    // if (!al_install_audio())
+    //     error("Can't initialize audio addon");
+    // if (!al_reserve_samples(16))
+    //     error("Can't reserve audio samples");
 
 
     /* Create the game's main timer that ticks 30 tick per second */
@@ -62,7 +58,8 @@ int main(int argc, char** argv)
     if (!font)
         error("Can't create font");
 
-    MainWindow window ={ 1280, 720 };
+    /* The dimensions for the initial display */
+    MainWindow window ={ .width = 1280, .height = 720 };
     ALLEGRO_DISPLAY *display;
 
     if (!(display = al_create_display(window.width, window.height)))
@@ -78,6 +75,22 @@ int main(int argc, char** argv)
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_register_event_source(queue, al_get_display_event_source(display));
 
+    /* The coordinates for the spaceship's initial position around the origin (0, 0) */
+    SpaceLine shipLeftLine ={ .x1 = -8.0, .y1 = 9.0, .x2 = 0.0, .y2 = -11.0 };
+    SpaceLine shipRightLine ={ .x1 = 8.0, .y1 = 9.0, .x2 = 0.0, .y2 = -11.0 };
+    SpaceLine shipLeftTale ={ .x1 = -6.0, .y1 = 4.0, .x2 = -1.0, .y2 = 4.0 };
+    SpaceLine shipRightTale ={ .x1 = 6.0, .y1 = 4.0, .x2 = 1.0, .y2 = 4.0 };
+
+    /* The point where the spaceship's head is */
+    SpaceHead spaceHead ={ .x = 0.0, .y = -11.0 };
+
+    Spaceship ship ={
+        .leftLine = &shipLeftLine,
+        .rightLine = &shipRightLine,
+        .leftTale = &shipLeftTale,
+        .rightTale = &shipRightTale,
+        .head = &spaceHead
+    };
 
     /* The ALLEGRO_EVENT structure that will recieve any dispatched event */
     ALLEGRO_EVENT event;
@@ -121,6 +134,8 @@ int main(int argc, char** argv)
         if (reRender && al_event_queue_is_empty(queue))
         {
             /* This is where the rendering happens. 30 frames are rendered per second */
+            draw_ship(&ship);
+            al_flip_display();
             reRender = false;
         }
     }
