@@ -1,5 +1,5 @@
 /*
-** This is my own version of Good ol' Blasteroids
+** This is my own version of Good ol    ' Blasteroids
 ** This is built only using the C standard library and the Allegro 5 framework
 */
 #include <stdio.h>
@@ -68,6 +68,11 @@ int main(int argc, char** argv)
     if (!(display = al_create_display(window.width, window.height)))
         error("Can't draw main window");
 
+    /* Antialiasing */
+    al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
+    al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
+    al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
+
     /* Notify the event queue of the sources, from which it should listen for dispatched events */
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_timer_event_source(timer));
@@ -116,6 +121,7 @@ int main(int argc, char** argv)
         if (reRender && al_event_queue_is_empty(queue))
         {
             /* This is where the rendering happens. 30 frames are rendered per second */
+            reRender = false;
         }
     }
 
