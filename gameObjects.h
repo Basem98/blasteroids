@@ -13,10 +13,10 @@ typedef struct MainWindow
  */
 typedef struct SpaceLine
 {
-    float x1;
-    float y1;
-    float x2;
-    float y2;
+    double x1;
+    double y1;
+    double x2;
+    double y2;
 } SpaceLine;
 
 /**
@@ -24,8 +24,8 @@ typedef struct SpaceLine
  */
 typedef struct SpaceHead
 {
-    float x;
-    float y;
+    double x;
+    double y;
 } SpaceHead;
 
 /**
@@ -35,5 +35,7 @@ typedef struct Spaceship
 {
     SpaceLine *spaceLine[4];
     SpaceHead *head;
+    SpaceHead *centerOfRotation;
+    double rotationAngle;
     ALLEGRO_COLOR color;
 } Spaceship;

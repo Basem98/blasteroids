@@ -12,6 +12,9 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_font.h>
 #include "gameObjects.h"
+#include "movementlogic.h"
+#include "renderfunctions.h"
+
 
 /**
  * Basic error handler
@@ -35,12 +38,7 @@ int main(int argc, char **argv)
         error("Can't initialize primtives addon");
     if (!al_init_font_addon())
         error("Can't initialize font addon");
-    // if (!al_init_acodec_addon())
-    //     error("Can't initialize acodec addon");
-    // if (!al_install_audio())
-    //     error("Can't initialize audio addon");
-    // if (!al_reserve_samples(16))
-    //     error("Can't reserve audio samples");
+
 
     /**
      * Create the game's main timer that ticks 30 tick per second
@@ -97,12 +95,18 @@ int main(int argc, char **argv)
      */
     SpaceHead spaceHead = {.x = 640.0, .y = 360.0};
 
+    /**
+     * The center of the spaceship's rotation
+    */
+    SpaceHead rotationPoint = {.x = 640.0, .y = 405.0};
 
     Spaceship ship = {
         .spaceLine = {&shipLeftLine, &shipRightLine, &shipLeftTale, &shipRightTale},
         .head = &spaceHead,
-        .color = al_map_rgb(0, 128, 0)
-    };
+        .centerOfRotation = &rotationPoint,
+        .rotationAngle = 30.0,
+        .color = al_map_rgb(0, 128, 0),
+        };
 
     /**
      * The ALLEGRO_EVENT structure that will recieve any dispatched event
@@ -137,15 +141,17 @@ int main(int argc, char **argv)
             reRender = true;
             break;
         }
-        case ALLEGRO_EVENT_KEY_DOWN:
+        case ALLEGRO_EVENT_KEY_CHAR:
         {
             if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
                 wannaExit = true;
             if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT)
             {
-                printf("ship_leftline_x1: %f\n", ship.spaceLine[0]->x1);
-                rotate_ship_right(&ship, 30.0);
-                printf("ship_leftline_x1: %f\n", ship.spaceLine[0]->x1);
+                rotate_ship(&ship, rotate_x_cw, rotate_y_cw);
+            }
+            if (event.keyboard.keycode == ALLEGRO_KEY_LEFT)
+            {
+                rotate_ship(&ship, rotate_x_anticw, rotate_y_anticw);
             }
 
             break;
