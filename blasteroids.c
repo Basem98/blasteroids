@@ -15,7 +15,7 @@
 #include "movementlogic.h"
 #include "renderfunctions.h"
 
-
+#define ROTATION_ANGLE 30.0
 /**
  * Basic error handler
  */
@@ -38,7 +38,6 @@ int main(int argc, char **argv)
         error("Can't initialize primtives addon");
     if (!al_init_font_addon())
         error("Can't initialize font addon");
-
 
     /**
      * Create the game's main timer that ticks 30 tick per second
@@ -85,28 +84,30 @@ int main(int argc, char **argv)
     /**
      * The coordinates for the spaceship's initial position
      */
-    SpaceLine shipLeftLine = {.x1 = 608.0, .y1 = 420.0, .x2 = 640.0, .y2 = 360.0};
-    SpaceLine shipRightLine = {.x1 = 672.0, .y1 = 420.0, .x2 = 640.0, .y2 = 360.0};
-    SpaceLine shipLeftTale = {.x1 = 664.0, .y1 = 405.0, .x2 = 644.0, .y2 = 405.0};
-    SpaceLine shipRightTale = {.x1 = 616.0, .y1 = 405.0, .x2 = 636.0, .y2 = 405.0};
+    SpaceLine shipLeftLine = {.x1 = 8.0 * 2, .y1 = 9.0 * 1.5, .x2 = 0.0, .y2 = -11.0 * 1.5};
+    SpaceLine shipRightLine = {.x1 = -8.0 * 2, .y1 = 9.0 * 1.5, .x2 = 0.0, .y2 = -11.0 * 1.5};
+    SpaceLine shipLeftTale = {.x1 = 6.0 * 2, .y1 = 4.0 * 1.5, .x2 = 1.0 * 2, .y2 = 4.0 * 1.5};
+    SpaceLine shipRightTale = {.x1 = -6.0 * 2, .y1 = 4.0 * 1.5, .x2 = -1.0 * 2, .y2 = 4.0 * 1.5};
 
     /**
      * The point where the spaceship's head is
      */
-    SpaceHead spaceHead = {.x = 640.0, .y = 360.0};
+    SpaceHead spaceHead = {.x = 0, .y = -11.0};
 
     /**
      * The center of the spaceship's rotation
     */
-    SpaceHead rotationPoint = {.x = 640.0, .y = 405.0};
+    SpaceHead rotationPoint = {.x = 0, .y = 4.0 * 1.5};
 
     Spaceship ship = {
+        .vx = 5,
+        .vy = 5,
         .spaceLine = {&shipLeftLine, &shipRightLine, &shipLeftTale, &shipRightTale},
         .head = &spaceHead,
+        .direction = 0.0,
         .centerOfRotation = &rotationPoint,
-        .rotationAngle = 30.0,
         .color = al_map_rgb(0, 128, 0),
-        };
+    };
 
     /**
      * The ALLEGRO_EVENT structure that will recieve any dispatched event
@@ -147,11 +148,15 @@ int main(int argc, char **argv)
                 wannaExit = true;
             if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT)
             {
-                rotate_ship(&ship, rotate_x_cw, rotate_y_cw);
+                rotate_ship(&ship, ROTATION_ANGLE, rotate_x_cw, rotate_y_cw);
             }
             if (event.keyboard.keycode == ALLEGRO_KEY_LEFT)
             {
-                rotate_ship(&ship, rotate_x_anticw, rotate_y_anticw);
+                rotate_ship(&ship, (ROTATION_ANGLE * -1), rotate_x_anticw, rotate_y_anticw);
+            }
+            if (event.keyboard.keycode == ALLEGRO_KEY_UP)
+            {
+                translate_ship(&ship);
             }
 
             break;

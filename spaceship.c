@@ -17,9 +17,8 @@
 /**
  * Convert the angle to radiants before calling sin or cos
  */
-#define COS(x) cos(x *(PI / 180))
-#define SIN(x) sin(x *(PI / 180))
-
+#define COS(x) cosf(fabs(x) * (PI / 180))
+#define SIN(x) sinf(fabs(x) * (PI / 180))
 
 void draw_ship(Spaceship *ship)
 {
@@ -37,52 +36,119 @@ void draw_ship(Spaceship *ship)
  * Rotation around the ship->centerOfRotation point:
  */
 
-double rotate_x_cw(double oldX, double oldY, SpaceHead *centerOfRotation, double rotationAngle)
+float rotate_x_cw(float oldX, float oldY, SpaceHead *centerOfRotation, float rotationAngle)
 {
-    double old_x = oldX - centerOfRotation->x;
-    double old_y = oldY - centerOfRotation->y;
+    float old_x = oldX - centerOfRotation->x;
+    float old_y = oldY - centerOfRotation->y;
 
     return ((old_x * COS(rotationAngle)) - (old_y * SIN(rotationAngle))) + centerOfRotation->x;
 }
-double rotate_y_cw(double oldX, double oldY, SpaceHead *centerOfRotation, double rotationAngle)
+float rotate_y_cw(float oldX, float oldY, SpaceHead *centerOfRotation, float rotationAngle)
 {
-    double old_x = oldX - centerOfRotation->x;
-    double old_y = oldY - centerOfRotation->y;
+    float old_x = oldX - centerOfRotation->x;
+    float old_y = oldY - centerOfRotation->y;
 
     return ((old_x * SIN(rotationAngle)) + (old_y * COS(rotationAngle))) + centerOfRotation->y;
 }
 
-double rotate_x_anticw(double oldX, double oldY, SpaceHead *centerOfRotation, double rotationAngle)
+float rotate_x_anticw(float oldX, float oldY, SpaceHead *centerOfRotation, float rotationAngle)
 {
-    double old_x = oldX - centerOfRotation->x;
-    double old_y = oldY - centerOfRotation->y;
+    float old_x = oldX - centerOfRotation->x;
+    float old_y = oldY - centerOfRotation->y;
 
     return ((old_x * COS(rotationAngle)) + (old_y * SIN(rotationAngle))) + centerOfRotation->x;
 }
 
-double rotate_y_anticw(double oldX, double oldY, SpaceHead *centerOfRotation, double rotationAngle)
+float rotate_y_anticw(float oldX, float oldY, SpaceHead *centerOfRotation, float rotationAngle)
 {
-    double old_x = oldX - centerOfRotation->x;
-    double old_y = oldY - centerOfRotation->y;
+    float old_x = oldX - centerOfRotation->x;
+    float old_y = oldY - centerOfRotation->y;
 
     return ((-1 * old_x * SIN(rotationAngle)) + (old_y * COS(rotationAngle))) + centerOfRotation->y;
 }
 
-void rotate_ship(Spaceship *ship, double (*rotate_x)(double, double, SpaceHead *, double), double (*rotate_y)(double, double, SpaceHead *, double))
+void rotate_ship(Spaceship *ship, float rotationAngle, float (*rotate_x)(float, float, SpaceHead *, float), float (*rotate_y)(float, float, SpaceHead *, float))
 {
-    double oldHeadX = ship->head->x;
-    double oldHeadY = ship->head->y;
-    ship->head->x = rotate_x(oldHeadX, oldHeadY, ship->centerOfRotation, ship->rotationAngle);
-    ship->head->y = rotate_y(oldHeadX, oldHeadY, ship->centerOfRotation, ship->rotationAngle);
+    float oldHeadX = ship->head->x;
+    float oldHeadY = ship->head->y;
+    ship->head->x = rotate_x(oldHeadX, oldHeadY, ship->centerOfRotation, rotationAngle);
+    ship->head->y = rotate_y(oldHeadX, oldHeadY, ship->centerOfRotation, rotationAngle);
     for (int i = 0; i < 4; i += 1)
     {
-        double oldX1 = ship->spaceLine[i]->x1;
-        double oldY1 = ship->spaceLine[i]->y1;
-        double oldX2 = ship->spaceLine[i]->x2;
-        double oldY2 = ship->spaceLine[i]->y2;
-        ship->spaceLine[i]->x1 = rotate_x(oldX1, oldY1, ship->centerOfRotation, ship->rotationAngle);
-        ship->spaceLine[i]->y1 = rotate_y(oldX1, oldY1, ship->centerOfRotation, ship->rotationAngle);
-        ship->spaceLine[i]->x2 = rotate_x(oldX2, oldY2, ship->centerOfRotation, ship->rotationAngle);
-        ship->spaceLine[i]->y2 = rotate_y(oldX2, oldY2, ship->centerOfRotation, ship->rotationAngle);
+        float oldX1 = ship->spaceLine[i]->x1;
+        float oldY1 = ship->spaceLine[i]->y1;
+        float oldX2 = ship->spaceLine[i]->x2;
+        float oldY2 = ship->spaceLine[i]->y2;
+        ship->spaceLine[i]->x1 = rotate_x(oldX1, oldY1, ship->centerOfRotation, rotationAngle);
+        ship->spaceLine[i]->y1 = rotate_y(oldX1, oldY1, ship->centerOfRotation, rotationAngle);
+        ship->spaceLine[i]->x2 = rotate_x(oldX2, oldY2, ship->centerOfRotation, rotationAngle);
+        ship->spaceLine[i]->y2 = rotate_y(oldX2, oldY2, ship->centerOfRotation, rotationAngle);
+    }
+    ship->direction = ship->direction >= 360 ? ship->direction - 360 : ship->direction <= -360 ? ship->direction + 360 : ship->direction;
+    ship->direction += rotationAngle;
+    printf("Angle: %f\n", rotationAngle);
+    printf("Direction: %f\n", ship->direction);
+}
+
+/**
+ * Translation
+*/
+void determine_direction(Spaceship *ship)
+{
+    float direction = ship->direction;
+    if (direction == 0 || direction == -360 || direction == 360)
+    {
+        ship->vx = 0;
+        ship->vy = -5;
+    }
+    if (direction == 90 || direction == -270)
+    {
+        ship->vx = 5;
+        ship->vy = 0;
+    }
+    if (direction == 180 || direction == -180)
+    {
+        ship->vx = 0;
+        ship->vy = 5;
+    }
+    if (direction == 270 || direction == -90)
+    {
+        ship->vx = -5;
+        ship->vy = 0;
+    }
+    if ((direction > 0 && direction < 90) || (direction > -360 && direction < -270))
+    {
+        ship->vx = 5;
+        ship->vy = -5;
+    }
+    if ((direction > 90 && direction < 180) || (direction > -270 && direction < -180))
+    {
+        ship->vx = 5;
+        ship->vy = 5;
+    }
+    if ((direction > 180 && direction < 270) || (direction > -180 && direction < -90))
+    {
+        ship->vx = -5;
+        ship->vy = 5;
+    }
+    if ((direction > 270 && direction < 360) || (direction > -90 && direction < 0))
+    {
+        ship->vx = -5;
+        ship->vy = -5;
+    }
+}
+void translate_ship(Spaceship *ship)
+{
+    determine_direction(ship);
+    ship->head->x += ship->vx;
+    ship->head->y += ship->vy;
+    ship->centerOfRotation->x += ship->vx;
+    ship->centerOfRotation->y += ship->vy;
+    for (int i = 0; i < 4; i += 1)
+    {
+        ship->spaceLine[i]->x1 += ship->vx;
+        ship->spaceLine[i]->y1 += ship->vy;
+        ship->spaceLine[i]->x2 += ship->vx;
+        ship->spaceLine[i]->y2 += ship->vy;
     }
 }
