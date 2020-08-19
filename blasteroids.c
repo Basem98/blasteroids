@@ -84,20 +84,20 @@ int main(int argc, char **argv)
     /**
      * The coordinates for the spaceship's initial position
      */
-    SpaceLine shipLeftLine = {.x1 = 8.0 * 2, .y1 = 9.0 * 1.5, .x2 = 0.0, .y2 = -11.0 * 1.5};
-    SpaceLine shipRightLine = {.x1 = -8.0 * 2, .y1 = 9.0 * 1.5, .x2 = 0.0, .y2 = -11.0 * 1.5};
-    SpaceLine shipLeftTale = {.x1 = 6.0 * 2, .y1 = 4.0 * 1.5, .x2 = 1.0 * 2, .y2 = 4.0 * 1.5};
-    SpaceLine shipRightTale = {.x1 = -6.0 * 2, .y1 = 4.0 * 1.5, .x2 = -1.0 * 2, .y2 = 4.0 * 1.5};
+    SpaceLine shipLeftLine = {.x1 = 168.0 * 4, .y1 = 140.0 * 3, .x2 = 160.0 * 4, .y2 = 120.0 * 3};
+    SpaceLine shipRightLine = {.x1 = 152.0 * 4, .y1 = 140.0 * 3, .x2 = 160.0 * 4, .y2 = 120.0 * 3};
+    SpaceLine shipLeftTale = {.x1 = 154.0 * 4, .y1 = 135.0 * 3, .x2 = 159.0 * 4, .y2 = 135.0 * 3};
+    SpaceLine shipRightTale = {.x1 = 166.0 * 4, .y1 = 135.0 * 3, .x2 = 161.0 * 4, .y2 = 135.0 * 3};
 
     /**
      * The point where the spaceship's head is
      */
-    SpaceHead spaceHead = {.x = 0, .y = -11.0};
+    SpaceHead spaceHead = {.x = 160.0 * 4, .y = 120.0 * 3};
 
     /**
      * The center of the spaceship's rotation
     */
-    SpaceHead rotationPoint = {.x = 0, .y = 4.0 * 1.5};
+    SpaceHead rotationPoint = {.x = 160.0 * 4, .y = 135.0 * 3};
 
     Spaceship ship = {
         .vx = 5,
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
             }
             if (event.keyboard.keycode == ALLEGRO_KEY_UP)
             {
-                translate_ship(&ship);
+                translate_ship(&ship, window);
             }
 
             break;

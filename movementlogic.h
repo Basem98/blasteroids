@@ -28,4 +28,4 @@ void determine_direction(Spaceship *ship);
 /**
  * Translate the ship in the direction it's headed
  */
-void translate_ship(Spaceship *ship);
+void translate_ship(Spaceship *ship, MainWindow window);

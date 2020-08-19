@@ -71,8 +71,7 @@ void rotate_ship(Spaceship *ship, float rotationAngle, float (*rotate_x)(float, 
 {
     float oldHeadX = ship->head->x;
     float oldHeadY = ship->head->y;
-    ship->head->x = rotate_x(oldHeadX, oldHeadY, ship->centerOfRotation, rotationAngle);
-    ship->head->y = rotate_y(oldHeadX, oldHeadY, ship->centerOfRotation, rotationAngle);
+
     for (int i = 0; i < 4; i += 1)
     {
         float oldX1 = ship->spaceLine[i]->x1;
@@ -84,10 +83,9 @@ void rotate_ship(Spaceship *ship, float rotationAngle, float (*rotate_x)(float, 
         ship->spaceLine[i]->x2 = rotate_x(oldX2, oldY2, ship->centerOfRotation, rotationAngle);
         ship->spaceLine[i]->y2 = rotate_y(oldX2, oldY2, ship->centerOfRotation, rotationAngle);
     }
+
     ship->direction = ship->direction >= 360 ? ship->direction - 360 : ship->direction <= -360 ? ship->direction + 360 : ship->direction;
     ship->direction += rotationAngle;
-    printf("Angle: %f\n", rotationAngle);
-    printf("Direction: %f\n", ship->direction);
 }
 
 /**
@@ -99,47 +97,54 @@ void determine_direction(Spaceship *ship)
     if (direction == 0 || direction == -360 || direction == 360)
     {
         ship->vx = 0;
-        ship->vy = -5;
+        ship->vy = -10;
     }
     if (direction == 90 || direction == -270)
     {
-        ship->vx = 5;
+        ship->vx = 10;
         ship->vy = 0;
     }
     if (direction == 180 || direction == -180)
     {
         ship->vx = 0;
-        ship->vy = 5;
+        ship->vy = 10;
     }
     if (direction == 270 || direction == -90)
     {
-        ship->vx = -5;
+        ship->vx = -10;
         ship->vy = 0;
     }
     if ((direction > 0 && direction < 90) || (direction > -360 && direction < -270))
     {
-        ship->vx = 5;
-        ship->vy = -5;
+        ship->vx = 10;
+        ship->vy = -10;
     }
     if ((direction > 90 && direction < 180) || (direction > -270 && direction < -180))
     {
-        ship->vx = 5;
-        ship->vy = 5;
+        ship->vx = 10;
+        ship->vy = 10;
     }
     if ((direction > 180 && direction < 270) || (direction > -180 && direction < -90))
     {
-        ship->vx = -5;
-        ship->vy = 5;
+        ship->vx = -10;
+        ship->vy = 10;
     }
     if ((direction > 270 && direction < 360) || (direction > -90 && direction < 0))
     {
-        ship->vx = -5;
-        ship->vy = -5;
+        ship->vx = -10;
+        ship->vy = -10;
     }
 }
-void translate_ship(Spaceship *ship)
+void translate_ship(Spaceship *ship, MainWindow window)
 {
     determine_direction(ship);
+    /**
+     * Check if the head of the ship has reached any of the display's edges before translating it any further
+    */
+    if (((ship->head->x + ship->vx) > window.width || (ship->head->x + ship->vx) < 0)
+    || ((ship->head->y + ship->vy) > window.height || (ship->head->y + ship->vy) < 0))
+        return;
+
     ship->head->x += ship->vx;
     ship->head->y += ship->vy;
     ship->centerOfRotation->x += ship->vx;
