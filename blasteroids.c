@@ -100,8 +100,8 @@ int main(int argc, char **argv)
     SpaceHead rotationPoint = {.x = 160.0 * 4, .y = 135.0 * 3};
 
     Spaceship ship = {
-        .vx = 5,
-        .vy = 5,
+        .vx = 10,
+        .vy = 10,
         .spaceLine = {&shipLeftLine, &shipRightLine, &shipLeftTale, &shipRightTale},
         .head = &spaceHead,
         .direction = 0.0,
