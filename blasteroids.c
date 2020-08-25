@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     /**
      * The dimensions for the initial display
      */
-    MainWindow window = {.width = 1280, .height = 720};
+    MainWindow window = {.width = 640, .height = 480};
     ALLEGRO_DISPLAY *display;
 
     if (!(display = al_create_display(window.width, window.height)))
@@ -84,20 +84,20 @@ int main(int argc, char **argv)
     /**
      * The coordinates for the spaceship's initial position
      */
-    SpaceLine shipLeftLine = {.x1 = 168.0 * 4, .y1 = 140.0 * 3, .x2 = 160.0 * 4, .y2 = 120.0 * 3};
-    SpaceLine shipRightLine = {.x1 = 152.0 * 4, .y1 = 140.0 * 3, .x2 = 160.0 * 4, .y2 = 120.0 * 3};
-    SpaceLine shipLeftTale = {.x1 = 154.0 * 4, .y1 = 135.0 * 3, .x2 = 159.0 * 4, .y2 = 135.0 * 3};
-    SpaceLine shipRightTale = {.x1 = 166.0 * 4, .y1 = 135.0 * 3, .x2 = 161.0 * 4, .y2 = 135.0 * 3};
+    SpaceLine shipLeftLine = {.x1 = 168.0, .y1 = 140.0, .x2 = 160.0, .y2 = 120.0};
+    SpaceLine shipRightLine = {.x1 = 152.0, .y1 = 140.0, .x2 = 160.0, .y2 = 120.0};
+    SpaceLine shipLeftTale = {.x1 = 154.0, .y1 = 135.0, .x2 = 159.0, .y2 = 135.0};
+    SpaceLine shipRightTale = {.x1 = 166.0, .y1 = 135.0, .x2 = 161.0, .y2 = 135.0};
 
     /**
      * The point where the spaceship's head is
      */
-    SpaceHead spaceHead = {.x = 160.0 * 4, .y = 120.0 * 3};
+    SpaceHead spaceHead = {.x = 160.0, .y = 120.0};
 
     /**
      * The center of the spaceship's rotation
     */
-    SpaceHead rotationPoint = {.x = 160.0 * 4, .y = 135.0 * 3};
+    SpaceHead rotationPoint = {.x = 160.0, .y = 135.0};
 
     Spaceship ship = {
         .vx = 10,
