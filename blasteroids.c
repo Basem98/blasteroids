@@ -15,7 +15,6 @@
 #include "movementlogic.h"
 #include "renderfunctions.h"
 
-#define ROTATION_ANGLE 30.0
 /**
  * Basic error handler
  */
@@ -81,31 +80,32 @@ int main(int argc, char **argv)
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_register_event_source(queue, al_get_display_event_source(display));
 
-    /**
-     * The coordinates for the spaceship's initial position
-     */
-    SpaceLine shipLeftLine = {.x1 = 168.0, .y1 = 140.0, .x2 = 160.0, .y2 = 120.0};
-    SpaceLine shipRightLine = {.x1 = 152.0, .y1 = 140.0, .x2 = 160.0, .y2 = 120.0};
-    SpaceLine shipLeftTale = {.x1 = 154.0, .y1 = 135.0, .x2 = 159.0, .y2 = 135.0};
-    SpaceLine shipRightTale = {.x1 = 166.0, .y1 = 135.0, .x2 = 161.0, .y2 = 135.0};
-
-    /**
-     * The point where the spaceship's head is
-     */
-    SpaceHead spaceHead = {.x = 160.0, .y = 120.0};
-
-    /**
-     * The center of the spaceship's rotation
-    */
-    SpaceHead rotationPoint = {.x = 160.0, .y = 135.0};
 
     Spaceship ship = {
-        .vx = 10,
-        .vy = 10,
-        .spaceLine = {&shipLeftLine, &shipRightLine, &shipLeftTale, &shipRightTale},
-        .head = &spaceHead,
+        .vx = 5,
+        .vy = 5,
+        /**
+         * The coordinates for the spaceship's body represented by a 2x8 matrix
+         */
+        .body = {
+            168.0, 160.0, 152.0, 160.0, 154.0, 159.0, 166.0, 161.0,
+            140.0, 120.0, 140.0, 120.0, 135.0, 135.0, 135.0, 135.0
+        },
+        /**
+         * The point where the spaceship's head is headed represented as a vector
+         */
+        .head = {
+            160.0,
+            120.0
+        },
+        /**
+         * The center of the spaceship's rotation represented as a vector
+         */
+        .centerOfRotation = {
+            160.0,
+            135.0
+        },
         .direction = 0.0,
-        .centerOfRotation = &rotationPoint,
         .color = al_map_rgb(0, 128, 0),
     };
 
@@ -148,11 +148,11 @@ int main(int argc, char **argv)
                 wannaExit = true;
             if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT)
             {
-                rotate_ship(&ship, ROTATION_ANGLE, rotate_x_cw, rotate_y_cw);
+                rotate_ship(&ship, 1);
             }
             if (event.keyboard.keycode == ALLEGRO_KEY_LEFT)
             {
-                rotate_ship(&ship, (ROTATION_ANGLE * -1), rotate_x_anticw, rotate_y_anticw);
+                rotate_ship(&ship, -1);
             }
             if (event.keyboard.keycode == ALLEGRO_KEY_UP)
             {
