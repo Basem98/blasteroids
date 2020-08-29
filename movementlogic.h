@@ -18,11 +18,23 @@ float rotate_y_ccw(float oldX, float oldY, float (*centerOfRotation)[1]);
 void rotate_ship(Spaceship *ship, short rotationDirection);
 
 /**
- * Determine where the ship's head is headed based on the rotationAngle
+ * Determine where a space object is headed based on the rotationAngle
 */
-void determine_direction(Spaceship *ship, float velocity);
+void determine_direction(float direction, float *vx, float *vy, float velocity);
 
 /**
  * Translate the ship in the direction it's headed
  */
 void translate_ship(Spaceship *ship, MainWindow window);
+
+/**
+ * Translate each blast in the direction it's headed
+*/
+// void translate_blast(Blast **previousBlast, Blast **currentBlast, MainWindow window);
+void translate_blast(Blast **headBlast, MainWindow window);
+
+
+/**
+ * Add another blast!
+*/
+void add_blast(Spaceship ship, Blast **headBlast);

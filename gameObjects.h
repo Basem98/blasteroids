@@ -20,3 +20,23 @@ typedef struct Spaceship
     float direction;
     ALLEGRO_COLOR color;
 } Spaceship;
+
+/**
+ * The blasts
+*/
+typedef struct BlastData
+{
+    float vx, vy;
+    float body[2][2];
+    float direction;
+    unsigned int isGone: 1;
+    ALLEGRO_COLOR color;
+} BlastData;
+
+/**
+ * The singly-linked list that will store all the current blasts
+*/
+typedef struct Blast {
+    BlastData *blastData;
+    struct Blast *next;
+} Blast;

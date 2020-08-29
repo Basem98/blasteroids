@@ -106,8 +106,10 @@ int main(int argc, char **argv)
             135.0
         },
         .direction = 0.0,
-        .color = al_map_rgb(0, 128, 0),
+        .color = al_map_rgb(0, 128, 0)
     };
+
+    Blast *headBlast = NULL;
 
     /**
      * The ALLEGRO_EVENT structure that will recieve any dispatched event
@@ -139,6 +141,7 @@ int main(int argc, char **argv)
             /**
              * The game's logic is calculated here exactly every 1/30th of a second (30 ticks per sec)
              */
+            translate_blast(&headBlast, window);
             reRender = true;
             break;
         }
@@ -157,6 +160,10 @@ int main(int argc, char **argv)
             if (event.keyboard.keycode == ALLEGRO_KEY_UP)
             {
                 translate_ship(&ship, window);
+            }
+            if (event.keyboard.keycode == ALLEGRO_KEY_SPACE)
+            {
+                add_blast(ship, &headBlast);
             }
 
             break;
@@ -178,6 +185,7 @@ int main(int argc, char **argv)
              */
             al_clear_to_color(al_map_rgb(0, 0, 0));
             draw_ship(&ship);
+            draw_blasts(headBlast);
             al_flip_display();
             reRender = false;
         }

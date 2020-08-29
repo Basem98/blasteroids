@@ -14,7 +14,7 @@
 
 #define NUM_OF_COLUMNS(x) sizeof(*(x)) / sizeof(float)
 #define PI 3.14159265359
-#define ROTATION_ANGLE 30.0
+#define ROTATION_ANGLE 45.0
 
 /**
  * Convert the angle to radiants before calling sin or cos
@@ -120,53 +120,52 @@ void rotate_ship(Spaceship *ship, short rotationDirection)
 /**
  * Translation
 */
-void determine_direction(Spaceship *ship, float velocity)
+void determine_direction(float direction, float *vx, float *vy, float velocity)
 {
-    float direction = ship->direction;
     if (direction == 0 || direction == 360)
     {
-        ship->vx = 0;
-        ship->vy = -1 * velocity;
+        *vx = 0;
+        *vy = -1 * velocity;
     }
     if (direction == 90)
     {
-        ship->vx = velocity;
-        ship->vy = 0;
+        *vx = velocity;
+        *vy = 0;
     }
     if (direction == 180)
     {
-        ship->vx = 0;
-        ship->vy = velocity;
+        *vx = 0;
+        *vy = velocity;
     }
     if (direction == 270)
     {
-        ship->vx = -1 * velocity;
-        ship->vy = 0;
+        *vx = -1 * velocity;
+        *vy = 0;
     }
     if ((direction > 0 && direction < 90))
     {
-        ship->vx = velocity;
-        ship->vy = -1 * velocity;
+        *vx = velocity;
+        *vy = -1 * velocity;
     }
     if ((direction > 90 && direction < 180))
     {
-        ship->vx = velocity;
-        ship->vy = velocity;
+        *vx = velocity;
+        *vy = velocity;
     }
     if ((direction > 180 && direction < 270))
     {
-        ship->vx = -1 * velocity;
-        ship->vy = velocity;
+        *vx = -1 * velocity;
+        *vy = velocity;
     }
     if ((direction > 270 && direction < 360))
     {
-        ship->vx = -1 * velocity;
-        ship->vy = -1 * velocity;
+        *vx = -1 * velocity;
+        *vy = -1 * velocity;
     }
 }
 void translate_ship(Spaceship *ship, MainWindow window)
 {
-    determine_direction(ship, 5);
+    determine_direction(ship->direction, &(ship->vx), &(ship->vy), 5.0);
     /**
      * Check if the head of the ship has reached any of the display's edges before translating it any further
     */
