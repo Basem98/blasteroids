@@ -1,5 +1,6 @@
 .vscode
 blasteroids
+blasto
 blasteroids.o
 spaceship.o
 blast.o
