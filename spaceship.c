@@ -14,7 +14,7 @@
 
 #define NUM_OF_COLUMNS(x) sizeof(*(x)) / sizeof(float)
 #define PI 3.14159265359
-#define ROTATION_ANGLE 45.0
+#define ROTATION_ANGLE 30.0
 
 /**
  * Convert the angle to radiants before calling sin or cos
@@ -144,23 +144,23 @@ void determine_direction(float direction, float *vx, float *vy, float velocity)
     }
     if ((direction > 0 && direction < 90))
     {
-        *vx = velocity;
-        *vy = -1 * velocity;
+        *vx = (velocity * fabs(SIN(direction)));
+        *vy = -1 * (velocity * fabs(COS(direction)));
     }
     if ((direction > 90 && direction < 180))
     {
-        *vx = velocity;
-        *vy = velocity;
+        *vx = (velocity * fabs(SIN(direction)));
+        *vy = (velocity * fabs(COS(direction)));
     }
     if ((direction > 180 && direction < 270))
     {
-        *vx = -1 * velocity;
-        *vy = velocity;
+        *vx = -1 * (velocity * fabs(SIN(direction)));
+        *vy = (velocity * fabs(COS(direction)));
     }
     if ((direction > 270 && direction < 360))
     {
-        *vx = -1 * velocity;
-        *vy = -1 * velocity;
+        *vx = -1 * (velocity * fabs(SIN(direction)));
+        *vy = -1 * (velocity * fabs(COS(direction)));
     }
 }
 void translate_ship(Spaceship *ship, MainWindow window)
