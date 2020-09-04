@@ -29,7 +29,6 @@ typedef struct BlastData
     float vx, vy;
     float body[2][2];
     float direction;
-    unsigned int isGone: 1;
     ALLEGRO_COLOR color;
 } BlastData;
 

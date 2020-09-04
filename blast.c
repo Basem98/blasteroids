@@ -86,7 +86,6 @@ void add_blast(Spaceship ship, Blast **headBlast)
     newBlastData->body[1][0] = ship.head[1][0];
     newBlastData->body[1][1] = ship.head[1][0] + newBlastData->vy;
 
-    newBlastData->isGone = false;
     newBlastData->color = al_map_rgb(0, 128, 0);
 
     newBlast->blastData = newBlastData;
