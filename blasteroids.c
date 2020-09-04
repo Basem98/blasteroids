@@ -45,10 +45,10 @@ int main(int argc, char **argv)
     if (!timer)
         error("Can't create game timer");
 
-    /* Create the event queue that will recieve any event
-    ** that comes from a registered event source,
-    ** then push that event in a FIFO manner to an ALLEGRO_EVENT structure
-    */
+    /** Create the event queue that will recieve any event
+     * that comes from a registered event source,
+     * then push that event in a FIFO manner to an ALLEGRO_EVENT structure
+     */
     ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
     if (!queue)
         error("Can't create event queue");
@@ -130,8 +130,8 @@ int main(int argc, char **argv)
     while (1)
     {
         /* This function pauses your program at this point
-        ** until an event is fired from any registered event source
-        */
+         * until an event is fired from any registered event source
+         */
         al_wait_for_event(queue, &event);
 
         switch (event.type)

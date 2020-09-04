@@ -33,16 +33,20 @@ void translate_blast(Blast **headBlast, MainWindow window)
     while (cur != NULL)
     {
         BlastData *curData = cur->blastData;
+        /* Check if any collision happened between the blast and any of the display's edges */
         if ((curData->body[0][1] < 0 || curData->body[0][1] > window.width)
         || (curData->body[1][1] < 0 || curData->body[1][1] > window.height))
         {
             Blast *nextBlast = cur->next;
             if (prev != NULL)
             {
+                /* If there's a previous blast, then assign the next blast to its next field */
                 prev->next = nextBlast;
             } else {
+                /* If there's no previous blast, then make the next blast the head */
                 *headBlast = nextBlast;
             }
+            /* Delete the blast that collided with the display's edges */
             free(curData);
             free(cur);
             cur = nextBlast;
@@ -52,9 +56,11 @@ void translate_blast(Blast **headBlast, MainWindow window)
         determine_direction(curData->direction, &(curData->vx), &(curData->vy), 5.0);
         for (int i = 0; i < 2; i += 1)
         {
+            /* Translate both of the blast's axes */
             curData->body[0][i] += curData->vx;
             curData->body[1][i] += curData->vy;
         }
+
         prev = cur;
         cur = cur->next;
     }

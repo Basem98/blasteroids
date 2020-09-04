@@ -24,7 +24,7 @@
 
 /**
  * The transformation matrices for clock-wise and counter clock-wise rotation
-*/
+ */
 float T_cw[2][2] = {
     COS(ROTATION_ANGLE), -1 * SIN(ROTATION_ANGLE),
     SIN(ROTATION_ANGLE), COS(ROTATION_ANGLE)
@@ -50,6 +50,7 @@ void draw_ship(Spaceship *ship)
  * Functions that will handle the 2D transformation
  */
 
+
 /**
  * Rotation around the ship->centerOfRotation point:
  */
@@ -58,7 +59,7 @@ float rotate_x_cw(float x, float y, float (*centerOfRotation)[1])
 {
     /**
      * Translate the points back to the origin before rotating
-    */
+     */
     float tx = x - centerOfRotation[0][0];
     float ty = y - centerOfRotation[1][0];
 
@@ -91,8 +92,8 @@ float rotate_y_ccw(float x, float y, float (*centerOfRotation)[1])
 void rotate_ship(Spaceship *ship, short rotationDirection)
 {
     /**
-     * Determine the direction of the rotation and the function to use based on the sign of the rotationDirection argument
-    */
+     * Determine the direction of the rotation and the rotation formula to use based on the sign of the rotationDirection argument
+     */
     float (*rotate_x)(float, float, float(*)[1]) = rotationDirection > 0 ? rotate_x_cw : rotate_x_ccw;
     float (*rotate_y)(float, float, float(*)[1]) = rotationDirection > 0 ? rotate_y_cw : rotate_y_ccw;
 
@@ -113,13 +114,17 @@ void rotate_ship(Spaceship *ship, short rotationDirection)
     }
 
     ship->direction += (rotationDirection * ROTATION_ANGLE);
+
+    /* Keep the ship's angle in the range between 0 to 360 for simplicity */
     ship->direction = ship->direction > 360 ? ship->direction - 360 : ship->direction;
     ship->direction = ship->direction < 0 ? ship->direction + 360 : ship->direction;
 }
 
+
 /**
  * Translation
 */
+
 void determine_direction(float direction, float *vx, float *vy, float velocity)
 {
     if (direction == 0 || direction == 360)
@@ -163,6 +168,7 @@ void determine_direction(float direction, float *vx, float *vy, float velocity)
         *vy = -1 * (velocity * fabs(COS(direction)));
     }
 }
+
 void translate_ship(Spaceship *ship, MainWindow window)
 {
     determine_direction(ship->direction, &(ship->vx), &(ship->vy), 5.0);
