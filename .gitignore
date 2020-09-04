@@ -1,6 +1,9 @@
 .vscode
 blasteroids
-blasto
+de_blasteroids
 blasteroids.o
 spaceship.o
 blast.o
+de_blasteroids.o
+de_spaceship.o
+de_blast.o
