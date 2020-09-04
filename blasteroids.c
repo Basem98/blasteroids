@@ -1,6 +1,6 @@
-/*
-** This is my own version of Good ol' Blasteroids
-** This is built only using the C standard library and the Allegro 5 framework
+/**
+ * This is my own version of Good ol' Blasteroids
+ * This is built only using the C standard library and the Allegro 5 framework
  */
 #include <stdio.h>
 #include <string.h>
@@ -45,7 +45,8 @@ int main(int argc, char **argv)
     if (!timer)
         error("Can't create game timer");
 
-    /** Create the event queue that will recieve any event
+    /** 
+     * Create the event queue that will recieve any event
      * that comes from a registered event source,
      * then push that event in a FIFO manner to an ALLEGRO_EVENT structure
      */

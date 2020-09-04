@@ -23,7 +23,7 @@ typedef struct Spaceship
 
 /**
  * The blasts
-*/
+ */
 typedef struct BlastData
 {
     float vx, vy;
@@ -34,7 +34,7 @@ typedef struct BlastData
 
 /**
  * The singly-linked list that will store all the current blasts
-*/
+ */
 typedef struct Blast {
     BlastData *blastData;
     struct Blast *next;
