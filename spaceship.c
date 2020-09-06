@@ -60,31 +60,31 @@ float rotate_x_cw(float x, float y, float (*centerOfRotation)[1])
     /**
      * Translate the points back to the origin before rotating
      */
-    float tx = x - centerOfRotation[0][0];
-    float ty = y - centerOfRotation[1][0];
+    float tx = x + (-1 * centerOfRotation[0][0]);
+    float ty = y + (-1 * centerOfRotation[1][0]);
 
     return ((tx * T_cw[0][0]) + (ty * T_cw[0][1])) + centerOfRotation[0][0];
 }
 float rotate_y_cw(float x, float y, float (*centerOfRotation)[1])
 {
-    float tx = x - centerOfRotation[0][0];
-    float ty = y - centerOfRotation[1][0];
+    float tx = x + (-1 * centerOfRotation[0][0]);
+    float ty = y + (-1 * centerOfRotation[1][0]);
 
     return ((tx * T_cw[1][0]) + (ty * T_cw[1][1])) + centerOfRotation[1][0];
 }
 
 float rotate_x_ccw(float x, float y, float (*centerOfRotation)[1])
 {
-    float tx = x - centerOfRotation[0][0];
-    float ty = y - centerOfRotation[1][0];
+    float tx = x + (-1 * centerOfRotation[0][0]);
+    float ty = y + (-1 * centerOfRotation[1][0]);
 
     return ((tx * T_ccw[0][0]) + (ty * T_ccw[0][1])) + centerOfRotation[0][0];
 }
 
 float rotate_y_ccw(float x, float y, float (*centerOfRotation)[1])
 {
-    float tx = x - centerOfRotation[0][0];
-    float ty = y - centerOfRotation[1][0];
+    float tx = x + (-1 * centerOfRotation[0][0]);
+    float ty = y + (-1 * centerOfRotation[1][0]);
 
     return ((tx * T_ccw[1][0]) + (ty * T_ccw[1][1])) + centerOfRotation[1][0];
 }
