@@ -1,4 +1,10 @@
 /**
+ * A macro that gets the number of columns in a matrix
+ */
+#define NUM_OF_COLUMNS(x) sizeof(*(x)) / sizeof(float)
+
+
+/**
  * The dimensions for the game's display window
  */
 typedef struct MainWindow
@@ -21,8 +27,9 @@ typedef struct Spaceship
     ALLEGRO_COLOR color;
 } Spaceship;
 
+
 /**
- * The blasts
+ * The Blasts
  */
 typedef struct BlastData
 {
@@ -32,10 +39,34 @@ typedef struct BlastData
     ALLEGRO_COLOR color;
 } BlastData;
 
+
 /**
  * The singly-linked list that will store all the current blasts
  */
 typedef struct Blast {
-    BlastData *blastData;
+    BlastData *data;
     struct Blast *next;
 } Blast;
+
+
+/**
+ * The Asteroids
+ */
+typedef struct AsteroidData
+{
+    float vx, vy;
+    float body[2][12];
+    float centerOfRotation[2][1];
+    float direction;
+    bool isHitTwice;
+    ALLEGRO_COLOR color;
+} AsteroidData;
+
+
+/**
+ * The singly-linked list that will store all the current asteroids
+ */
+typedef struct Asteroid {
+    AsteroidData *data;
+    struct Asteroid *next;
+} Asteroid;
