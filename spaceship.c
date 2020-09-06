@@ -12,7 +12,6 @@
 #include "movementlogic.h"
 #include "renderfunctions.h"
 
-#define NUM_OF_COLUMNS(x) sizeof(*(x)) / sizeof(float)
 #define PI 3.14159265359
 #define ROTATION_ANGLE 30.0
 
