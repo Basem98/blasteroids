@@ -3,7 +3,9 @@ blasteroids
 de_blasteroids
 blasteroids.o
 spaceship.o
+asteroid.o
 blast.o
 de_blasteroids.o
 de_spaceship.o
+de_asteroid.o
 de_blast.o
