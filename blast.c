@@ -8,15 +8,17 @@
 #include "movementlogic.h"
 #include "renderfunctions.h"
 
+
 void draw_blasts(Blast *headBlast)
 {
-    if (headBlast == NULL || headBlast->blastData == NULL)
+    if (headBlast == NULL || headBlast->data == NULL)
         return;
 
-    al_draw_line(
-        headBlast->blastData->body[0][0], headBlast->blastData->body[1][0],
-        headBlast->blastData->body[0][1], headBlast->blastData->body[1][1],
-        headBlast->blastData->color, 3.0);
+    for (int i = 0; i + 1 < NUM_OF_COLUMNS(headBlast->data->body); i += 1)
+        al_draw_line(
+            headBlast->data->body[0][i], headBlast->data->body[1][i],
+            headBlast->data->body[0][i + 1], headBlast->data->body[1][i + 1],
+            headBlast->data->color, 3.0);
 
     draw_blasts(headBlast->next);
 }
@@ -32,7 +34,7 @@ void translate_blast(Blast **headBlast, MainWindow window)
 
     while (cur != NULL)
     {
-        BlastData *curData = cur->blastData;
+        BlastData *curData = cur->data;
         /* Check if any collision happened between the blast and any of the display's edges */
         if ((curData->body[0][1] < 0 || curData->body[0][1] > window.width)
         || (curData->body[1][1] < 0 || curData->body[1][1] > window.height))
@@ -88,7 +90,7 @@ void add_blast(Spaceship ship, Blast **headBlast)
 
     newBlastData->color = al_map_rgb(0, 128, 0);
 
-    newBlast->blastData = newBlastData;
+    newBlast->data = newBlastData;
     newBlast->next = NULL;
 
     while (*currentBlast != NULL)
