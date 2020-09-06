@@ -3,12 +3,16 @@
  */
 
 
+/* Rotate the x axis of a vector in a clock-wise direction around the centerOfRotation vector */
 float rotate_x_cw(float oldX, float oldY, float (*centerOfRotation)[1]);
 
+/* Rotate the y axis of a vector in a clock-wise direction around the centerOfRotation vector */
 float rotate_y_cw(float oldX, float oldY, float (*centerOfRotation)[1]);
 
+/* Rotate the x axis of a vector in a counter clock-wise direction around the centerOfRotation vector */
 float rotate_x_ccw(float oldX, float oldY, float (*centerOfRotation)[1]);
 
+/* Rotate the y axis of a vector in a counter clock-wise direction around the centerOfRotation vector */
 float rotate_y_ccw(float oldX, float oldY, float (*centerOfRotation)[1]);
 
 /**
