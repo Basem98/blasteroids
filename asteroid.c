@@ -26,47 +26,6 @@ void draw_asteroids(Asteroid *headAsteroid)
     draw_asteroids(headAsteroid->next);
 }
 
-// void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy)
-// {
-//     if (*headAsteroid == NULL)
-//         return;
-
-//     Asteroid *currentAsteroid = *headAsteroid;
-//     Asteroid *newAsteroid = malloc(sizeof(Asteroid));
-//     AsteroidData *newAsteroidData = malloc(sizeof(AsteroidData));
-//     if (newAsteroid == NULL || newAsteroidData == NULL)
-//     {
-//         puts("Can't allocate memory for newAsteroid or newAsteroidData!");
-//         exit(2);
-//     }
-
-//     newAsteroidData->color = al_map_rgb(0, 128, 0);
-
-//     /* Get a random angle between 0 and 360 */
-//     newAsteroidData->direction = direction;
-
-//     newAsteroidData->twist = 10.0;
-//     newAsteroidData->isHitTwice = false;
-//     newAsteroidData->isDuplicate = false;
-//     newAsteroidData->vx = vx;
-//     newAsteroidData->vy = vy;
-
-//     for (size_t i = 0; i < NUM_OF_COLUMNS(currentAsteroid->data->body); i += 1)
-//     {
-//         newAsteroidData->body[0][i] = currentAsteroid->data->body[0][i] + vx;
-//         newAsteroidData->body[1][i] = currentAsteroid->data->body[1][i] + vy;
-//     }
-//     newAsteroidData->centerOfRotation[0][0] = currentAsteroid->data->centerOfRotation[0][0] + vx;
-//     newAsteroidData->centerOfRotation[1][0] = currentAsteroid->data->centerOfRotation[1][0] + vy;
-
-//     while (currentAsteroid->next != NULL)
-//         currentAsteroid = currentAsteroid->next;
-
-//     newAsteroid->data = newAsteroidData;
-//     newAsteroid->next = NULL;
-//     currentAsteroid->next = newAsteroid;
-// }
-
 
 void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy)
 {
