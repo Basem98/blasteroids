@@ -1,7 +1,3 @@
-/**
- * This is my own version of Good ol' Blasteroids
- * This is built only using the C standard library and the Allegro 5 framework
- */
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -24,7 +20,7 @@ void error(char *err)
     exit(2);
 }
 
-int main(int argc, char **argv)
+int main()
 {
     /**
      * Initialize Allegro's core library and all the addons to be used in the project
@@ -81,7 +77,6 @@ int main(int argc, char **argv)
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_register_event_source(queue, al_get_display_event_source(display));
 
-
     Spaceship ship = {
         .vx = 5,
         .vy = 5,
@@ -89,26 +84,58 @@ int main(int argc, char **argv)
          * The coordinates for the spaceship's body represented by a 2x8 matrix
          */
         .body = {
-            168.0, 160.0, 152.0, 160.0, 154.0, 159.0, 166.0, 161.0,
-            140.0, 120.0, 140.0, 120.0, 135.0, 135.0, 135.0, 135.0
+            {168.0, 160.0, 152.0, 160.0, 154.0, 159.0, 166.0, 161.0},
+            {140.0, 120.0, 140.0, 120.0, 135.0, 135.0, 135.0, 135.0}
         },
         /**
          * The point where the spaceship's head is headed represented as a vector
          */
         .head = {
-            160.0,
-            120.0
-        },
+            {160.0},
+            {120.0}
+            },
         /**
          * The center of the spaceship's rotation represented as a vector
          */
         .centerOfRotation = {
-            160.0,
-            135.0
+            {160.0},
+            {135.0}
         },
         .direction = 0.0,
-        .color = al_map_rgb(0, 128, 0)
-    };
+        .color = al_map_rgb(0, 128, 0)};
+
+    AsteroidData asteroidData = {
+        .vx = 5,
+        .vy = 5,
+        /**
+         * The coordinates for the asteroid's body represented by a 2x12 matrix
+         */
+        .body = {
+            {10, 5, 5, 20, 25, 35, 50, 50, 30, 50, 40, 30},
+            {50, 35, 20, 20, 10, 10, 20, 25, 30, 40, 50, 45}
+        },
+        /**
+         * The center of the asteroid's rotation represented as a vector
+         */
+        .centerOfRotation = {
+            {30},
+            {30}
+        },
+        .direction = 135,
+        .twist = 10.0,
+        .isHitTwice = false,
+        .isDuplicate = false,
+        .color = al_map_rgb(0, 128, 0)};
+
+    Asteroid asteroid = {.data = &asteroidData, .next = NULL};
+    Asteroid *headAsteroid = &asteroid;
+
+    /* Add 4 asteroids to */
+    for (int i = 0; i < 5; i += 1)
+    {
+        add_asteroid(&headAsteroid, rand() % 361, 610, rand() % 480);
+        add_asteroid(&headAsteroid, rand() % 361, rand() % 640, 450);
+    }
 
     Blast *headBlast = NULL;
 
@@ -142,6 +169,8 @@ int main(int argc, char **argv)
             /**
              * The game's logic is calculated here exactly every 1/30th of a second (30 ticks per sec)
              */
+            rotate_asteroid(&headAsteroid);
+            translate_asteroid(&headAsteroid, window);
             translate_blast(&headBlast, window);
             reRender = true;
             break;
@@ -186,6 +215,7 @@ int main(int argc, char **argv)
              */
             al_clear_to_color(al_map_rgb(0, 0, 0));
             draw_ship(&ship);
+            draw_asteroids(headAsteroid);
             draw_blasts(headBlast);
             al_flip_display();
             reRender = false;

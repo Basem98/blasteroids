@@ -7,3 +7,8 @@ void draw_ship(Spaceship *ship);
  * Iterate over the list of blasts and draw them to the display
 */
 void draw_blasts(Blast *headBlast);
+
+/**
+ * Iterate over the list of asteroids and draw them to the display
+*/
+void draw_asteroids(Asteroid *headAsteroid);
