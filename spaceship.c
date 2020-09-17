@@ -11,9 +11,11 @@
 #include "gameObjects.h"
 #include "movementlogic.h"
 #include "renderfunctions.h"
+#include "myMacros.h"
+
 
 #define PI 3.14159265359
-#define ROTATION_ANGLE 30.0
+#define ROTATION_ANGLE 10.0
 
 /**
  * Convert the angle to radiants before calling sin or cos
@@ -38,7 +40,7 @@ float T_ccw[2][2] = {
 
 void draw_ship(Spaceship *ship)
 {
-    for (int i = 0; i < NUM_OF_COLUMNS(ship->body); i += 2)
+    for (size_t i = 0; i < NUM_OF_COLUMNS(ship->body); i += 2)
     {
         if (i + 1 < NUM_OF_COLUMNS(ship->body))
             al_draw_line(ship->body[0][i], ship->body[1][i], ship->body[0][i + 1], ship->body[1][i + 1], ship->color, 3.0);
@@ -104,7 +106,7 @@ void rotate_ship(Spaceship *ship, short rotationDirection)
     float oldX;
     float oldY;
 
-    for (int i = 0; i < NUM_OF_COLUMNS(ship->body); i += 1)
+    for (size_t i = 0; i < NUM_OF_COLUMNS(ship->body); i += 1)
     {
         oldX = ship->body[0][i];
         oldY = ship->body[1][i];
@@ -182,7 +184,7 @@ void translate_ship(Spaceship *ship, MainWindow window)
     ship->centerOfRotation[0][0] += ship->vx;
     ship->centerOfRotation[1][0] += ship->vy;
 
-    for (int i = 0; i < NUM_OF_COLUMNS(ship->body); i += 1)
+    for (size_t i = 0; i < NUM_OF_COLUMNS(ship->body); i += 1)
     {
         ship->body[0][i] += ship->vx;
         ship->body[1][i] += ship->vy;

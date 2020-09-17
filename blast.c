@@ -7,14 +7,14 @@
 #include "gameObjects.h"
 #include "movementlogic.h"
 #include "renderfunctions.h"
-
+#include "myMacros.h"
 
 void draw_blasts(Blast *headBlast)
 {
     if (headBlast == NULL || headBlast->data == NULL)
         return;
 
-    for (int i = 0; i + 1 < NUM_OF_COLUMNS(headBlast->data->body); i += 1)
+    for (size_t i = 0; i + 1 < NUM_OF_COLUMNS(headBlast->data->body); i += 1)
         al_draw_line(
             headBlast->data->body[0][i], headBlast->data->body[1][i],
             headBlast->data->body[0][i + 1], headBlast->data->body[1][i + 1],
@@ -22,7 +22,6 @@ void draw_blasts(Blast *headBlast)
 
     draw_blasts(headBlast->next);
 }
-
 
 void translate_blast(Blast **headBlast, MainWindow window)
 {
@@ -36,15 +35,16 @@ void translate_blast(Blast **headBlast, MainWindow window)
     {
         BlastData *curData = cur->data;
         /* Check if any collision happened between the blast and any of the display's edges */
-        if ((curData->body[0][1] < 0 || curData->body[0][1] > window.width)
-        || (curData->body[1][1] < 0 || curData->body[1][1] > window.height))
+        if ((curData->body[0][1] < 0 || curData->body[0][1] > window.width) || (curData->body[1][1] < 0 || curData->body[1][1] > window.height))
         {
             Blast *nextBlast = cur->next;
             if (prev != NULL)
             {
                 /* If there's a previous blast, then assign the next blast to its next field */
                 prev->next = nextBlast;
-            } else {
+            }
+            else
+            {
                 /* If there's no previous blast, then make the next blast the head */
                 *headBlast = nextBlast;
             }
@@ -75,7 +75,10 @@ void add_blast(Spaceship ship, Blast **headBlast)
     BlastData *newBlastData = malloc(sizeof(BlastData));
 
     if (newBlast == NULL || newBlastData == NULL)
+    {
         puts("Unable to allocate memory for newBlast or newBlastData!\n");
+        exit(2);
+    }
 
     newBlastData->vx = 5.0;
     newBlastData->vy = 5.0;
