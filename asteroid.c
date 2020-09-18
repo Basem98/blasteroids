@@ -26,7 +26,6 @@ void draw_asteroids(Asteroid *headAsteroid)
     draw_asteroids(headAsteroid->next);
 }
 
-
 void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy)
 {
     if (*headAsteroid == NULL)
@@ -48,7 +47,8 @@ void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy)
 
     newAsteroidData->twist = 10.0;
     newAsteroidData->isHitTwice = false;
-    newAsteroidData->isDuplicate = false;
+    newAsteroidData->isDupe = false;
+    newAsteroidData->hasBeenDuped = false;
     newAsteroidData->vx = vx;
     newAsteroidData->vy = vy;
 
@@ -67,7 +67,6 @@ void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy)
     newAsteroid->next = NULL;
     currentAsteroid->next = newAsteroid;
 }
-
 
 void rotate_asteroid(Asteroid **headAsteroid)
 {
@@ -91,10 +90,10 @@ void rotate_asteroid(Asteroid **headAsteroid)
     rotate_asteroid(&(*headAsteroid)->next);
 }
 
-Asteroid *add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
+void add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
 {
     if (*originalAsteroid == NULL)
-        return NULL;
+        return;
 
     Asteroid *curr = *originalAsteroid;
 
@@ -111,7 +110,8 @@ Asteroid *add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
 
     newAsteroidData->twist = 10.0;
     newAsteroidData->isHitTwice = false;
-    newAsteroidData->isDuplicate = true;
+    newAsteroidData->isDupe = true;
+    newAsteroidData->hasBeenDuped = false;
 
     for (size_t i = 0; i < NUM_OF_COLUMNS((*originalAsteroid)->data->body); i += 1)
     {
@@ -129,8 +129,6 @@ Asteroid *add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
         curr = curr->next;
 
     curr->next = newAsteroid;
-
-    return newAsteroid;
 }
 
 void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
@@ -144,24 +142,19 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
     while (curr != NULL)
     {
         /**
-         * A variable that's either 0 when all the X axes of the vertices of an asteroid's body are still within the display's borders,
+         * 2 variables that are either 0 when all the X or Y axes of the vertices of an asteroid's body are still within the display's borders,
          * or it's the value that should be added or subtracted from these axes to get them back within the display's borders
          */
         float isXoffScreen = 0;
-
-        /**
-         * A variable that's either 0 when all the Y axes of the vertices of an asteroid's body are still within the display's borders,
-         * or it's the value that should be added or subtracted from these axes to get them back within the display's borders
-         */
         float isYoffScreen = 0;
 
-        bool isAsteroidCompletelyOff = true;
+        bool isCompletelyOnScreen = true;
+        bool isCompletelyOffScreen = true;
 
         AsteroidData *currData = curr->data;
-        Asteroid *next = curr->next;
 
         determine_direction(currData->direction, &(currData->vx), &(currData->vy), 1.0);
- 
+
         /* Translate the asteroid and check for collisions with the borders */
         for (size_t i = 0; i < NUM_OF_COLUMNS(currData->body); i += 1)
         {
@@ -170,63 +163,57 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
 
             if ((currData->body[0][i] < 0 || currData->body[0][i] > window.width) || (currData->body[1][i] < 0 || currData->body[1][i] > window.height))
             {
-                if (currData->body[0][i] < 0)
-                {
-                    isXoffScreen = window.width;
-                }
-                else if (currData->body[0][i] > window.width)
-                {
-                    isXoffScreen = -1 * window.width;
-                }
+                isCompletelyOnScreen = false;
 
-                if (currData->body[1][i] < 0)
-                {
-                    isYoffScreen = window.height;
-                }
-                else if (currData->body[1][i] > window.height)
-                {
-                    isYoffScreen = -1 * window.height;
-                }
+                isXoffScreen = currData->body[0][i] < 0 ? window.width
+                                                        : currData->body[0][i] > window.width ? -1 * window.width : 0;
+
+                isYoffScreen = currData->body[1][i] < 0 ? window.height
+                                                        : currData->body[1][i] > window.height ? -1 * window.height : 0;
+
+                continue;
             }
-            else
-            {
-                isAsteroidCompletelyOff = false;
-            }
+            isCompletelyOffScreen = false;
         }
         currData->centerOfRotation[0][0] += currData->vx;
         currData->centerOfRotation[1][0] += currData->vy;
 
-        /** 
-         * If all the asteroid's body is off screen, then delete it and free the memory
+        /**
+         * If the dupe asteroid is completely on screen now, stop treating it as a dupe,
+         * in order to duplicate when it itself starts getting off the screen
          */
-        if (isAsteroidCompletelyOff)
+        if (isCompletelyOnScreen && (currData->isDupe))
+            currData->isDupe = false;
+
+        /** 
+         * If all of the asteroid's body is off screen, then delete it and free the memory
+         */
+        if (isCompletelyOffScreen)
         {
+            Asteroid *next = curr->next;
+
             if (prev != NULL)
-            {
                 prev->next = next;
-            }
             else
-            {
                 *headAsteroid = next;
-            }
 
             free(currData);
             free(curr);
 
             curr = next;
+            continue;
         }
-        else
-        {
-            /** 
-             * If only some of the asteroid's vertices are off screen, then create a duplicate asteroid
-             */
-            if ((isXoffScreen || isYoffScreen) && !(currData->isDuplicate))
-            {
-                add_dup_asteroid(&curr, isXoffScreen, isYoffScreen);
-            }
 
-            prev = curr;
-            curr = curr->next;
+        /** 
+         * If only some of the asteroid's vertices are off screen, then create a duplicate asteroid
+         */
+        if ((isXoffScreen || isYoffScreen) && (!(currData->hasBeenDuped) && !(currData->isDupe)))
+        {
+            add_dup_asteroid(&curr, isXoffScreen, isYoffScreen);
+            currData->hasBeenDuped = true;
         }
+
+        prev = curr;
+        curr = curr->next;
     }
 }

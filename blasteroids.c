@@ -10,6 +10,7 @@
 #include "gameObjects.h"
 #include "movementlogic.h"
 #include "renderfunctions.h"
+#include "myMacros.h"
 
 /**
  * Basic error handler
@@ -77,6 +78,7 @@ int main()
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_register_event_source(queue, al_get_display_event_source(display));
 
+    /* The Spaceship */
     Spaceship ship = {
         .vx = 5,
         .vy = 5,
@@ -85,58 +87,66 @@ int main()
          */
         .body = {
             {168.0, 160.0, 152.0, 160.0, 154.0, 159.0, 166.0, 161.0},
-            {140.0, 120.0, 140.0, 120.0, 135.0, 135.0, 135.0, 135.0}
-        },
+            {140.0, 120.0, 140.0, 120.0, 135.0, 135.0, 135.0, 135.0}},
         /**
          * The point where the spaceship's head is headed represented as a vector
          */
-        .head = {
-            {160.0},
-            {120.0}
-            },
+        .head = {{160.0}, {120.0}},
         /**
          * The center of the spaceship's rotation represented as a vector
          */
-        .centerOfRotation = {
-            {160.0},
-            {135.0}
-        },
+        .centerOfRotation = {{160.0}, {135.0}},
         .direction = 0.0,
         .color = al_map_rgb(0, 128, 0)};
 
-    AsteroidData asteroidData = {
-        .vx = 5,
-        .vy = 5,
-        /**
-         * The coordinates for the asteroid's body represented by a 2x12 matrix
-         */
-        .body = {
-            {10, 5, 5, 20, 25, 35, 50, 50, 30, 50, 40, 30},
-            {50, 35, 20, 20, 10, 10, 20, 25, 30, 40, 50, 45}
-        },
-        /**
-         * The center of the asteroid's rotation represented as a vector
-         */
-        .centerOfRotation = {
-            {30},
-            {30}
-        },
-        .direction = 135,
-        .twist = 10.0,
-        .isHitTwice = false,
-        .isDuplicate = false,
-        .color = al_map_rgb(0, 128, 0)};
+    /* The base asteroid */
+    AsteroidData *asteroidData = malloc(sizeof(AsteroidData));
+    if (asteroidData == NULL)
+        error("Can't allocate memory for asteroidData!");
 
-    Asteroid asteroid = {.data = &asteroidData, .next = NULL};
-    Asteroid *headAsteroid = &asteroid;
+    asteroidData->vx = 2.0;
+    asteroidData->vy = 2.0;
 
-    /* Add 4 asteroids to */
+    /**
+     * The coordinates for the asteroid's body represented by a 2x12 matrix
+     */
+    float body[2][12] = {
+        {10, 5, 5, 20, 25, 35, 50, 50, 30, 50, 40, 30},
+        {50, 35, 20, 20, 10, 10, 20, 25, 30, 40, 50, 45}};
+    for (size_t i = 0; i < NUM_OF_COLUMNS(body); i += 1)
+    {
+        asteroidData->body[0][i] = body[0][i];
+        asteroidData->body[1][i] = body[1][i];
+    }
+
+    /**
+     * The center of the asteroid's rotation represented as a vector
+     */
+    asteroidData->centerOfRotation[0][0] = asteroidData->body[0][8];
+    asteroidData->centerOfRotation[0][1] = asteroidData->body[1][8];
+
+    asteroidData->direction = 135;
+    asteroidData->twist = 10.0;
+    asteroidData->isHitTwice = false;
+    asteroidData->isDupe = false;
+    asteroidData->hasBeenDuped = false;
+    asteroidData->color = al_map_rgb(0, 128, 0);
+
+    Asteroid *headAsteroid = malloc(sizeof(Asteroid));
+    if (headAsteroid == NULL)
+        error("Can't allocate memory for headAsteroid!");
+
+    headAsteroid->data = asteroidData;
+    headAsteroid->next = NULL;
+
+    /* Add 10 asteroids to start the game with */
     for (int i = 0; i < 5; i += 1)
     {
         add_asteroid(&headAsteroid, rand() % 361, 610, rand() % 480);
         add_asteroid(&headAsteroid, rand() % 361, rand() % 640, 450);
     }
 
+    /* The blasts */
     Blast *headBlast = NULL;
 
     /**

@@ -49,7 +49,9 @@ typedef struct AsteroidData
     float direction;
     float twist;
     bool isHitTwice;
-    bool isDuplicate;
+    bool isDupe;
+    bool hasBeenDuped;
+
     ALLEGRO_COLOR color;
 } AsteroidData;
 

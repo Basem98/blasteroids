@@ -63,7 +63,7 @@ void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy);
  * Add a duplicate asteroid that matches the originalAsteroid to the end of the list,
  * but the only visible parts of it will be the parts that are off screen in the originalAsteroid
  */
-Asteroid* add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy);
+void add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy);
 
 /* Rotate each asteroid around itself based on its twist angle */
 void rotate_asteroid(Asteroid **headAsteroid);
