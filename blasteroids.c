@@ -181,7 +181,7 @@ int main()
              */
             rotate_asteroid(&headAsteroid);
             translate_asteroid(&headAsteroid, window);
-            translate_blast(&headBlast, window);
+            translate_blast(&headBlast, &headAsteroid, window);
             reRender = true;
             break;
         }

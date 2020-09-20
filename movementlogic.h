@@ -46,7 +46,7 @@ void translate_ship(Spaceship *ship, MainWindow window);
  */
 
 /* Translate each blast in the direction it's headed */
-void translate_blast(Blast **headBlast, MainWindow window);
+void translate_blast(Blast **headBlast, Asteroid **asteroids, MainWindow window);
 
 /* Add another blast! */
 void add_blast(Spaceship ship, Blast **headBlast);
@@ -70,3 +70,11 @@ void rotate_asteroid(Asteroid **headAsteroid);
 
 /* Translate each asteroid in the same direction, which is defined in the direction property */
 void translate_asteroid(Asteroid **headAsteroid, MainWindow window);
+
+
+/**
+ * Collision Detection
+ */
+
+/* Check for collision between each blast and asteroid on screen */
+bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids);

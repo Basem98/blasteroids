@@ -23,7 +23,7 @@ void draw_blasts(Blast *headBlast)
     draw_blasts(headBlast->next);
 }
 
-void translate_blast(Blast **headBlast, MainWindow window)
+void translate_blast(Blast **headBlast, Asteroid **asteroids, MainWindow window)
 {
     if (*headBlast == NULL)
         return;
@@ -35,7 +35,8 @@ void translate_blast(Blast **headBlast, MainWindow window)
     {
         BlastData *curData = cur->data;
         /* Check if any collision happened between the blast and any of the display's edges */
-        if ((curData->body[0][1] < 0 || curData->body[0][1] > window.width) || (curData->body[1][1] < 0 || curData->body[1][1] > window.height))
+        if (((curData->body[0][1] < 0 || curData->body[0][1] > window.width) || (curData->body[1][1] < 0 || curData->body[1][1] > window.height))
+        || (blast_asteroid_coll(&cur, asteroids)))
         {
             Blast *nextBlast = cur->next;
             if (prev != NULL)
@@ -54,6 +55,9 @@ void translate_blast(Blast **headBlast, MainWindow window)
             cur = nextBlast;
             continue;
         }
+
+        
+
 
         determine_direction(curData->direction, &(curData->vx), &(curData->vy), 5.0);
         for (int i = 0; i < 2; i += 1)
@@ -100,4 +104,37 @@ void add_blast(Spaceship ship, Blast **headBlast)
         currentBlast = &(*currentBlast)->next;
 
     *currentBlast = newBlast;
+}
+
+bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids)
+{
+    if (*currBlast == NULL || *asteroids == NULL)
+        return false;
+
+    bool collision = false;
+    Asteroid *currAst = *asteroids;
+    Asteroid *prevAst = NULL;
+    float px = (*currBlast)->data->body[0][1];
+    float py = (*currBlast)->data->body[1][1];
+    while (currAst != NULL)
+    {
+        AsteroidData *currData = currAst->data;
+        for (size_t currVertex = 0; currVertex < NUM_OF_COLUMNS(currData->body); currVertex += 1)
+        {
+            int nextVertex = currVertex + 1 < NUM_OF_COLUMNS(currData->body) ? currVertex + 1 : 0;
+            float vc_x = currData->body[0][currVertex];
+            float vc_y = currData->body[1][currVertex];
+            float vn_x = currData->body[0][nextVertex];
+            float vn_y = currData->body[1][nextVertex];
+            if (((vc_y > py) != (vn_y > py))
+            && (px < (vn_x-vc_x) * (py-vc_y) / (vn_y-vc_y) + vc_x))
+                collision = !collision;
+
+        }
+        if (collision)
+            break;
+        prevAst = currAst;
+        currAst = currAst->next;
+    }
+    return collision;
 }
