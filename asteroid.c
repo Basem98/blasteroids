@@ -46,7 +46,7 @@ void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy)
     newAsteroidData->direction = direction;
 
     newAsteroidData->twist = 10.0;
-    newAsteroidData->isHitTwice = false;
+    newAsteroidData->isHit = false;
     newAsteroidData->isDupe = false;
     newAsteroidData->hasBeenDuped = false;
     newAsteroidData->vx = vx;
@@ -101,15 +101,17 @@ void add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
     AsteroidData *newAsteroidData = malloc(sizeof(AsteroidData));
 
     if (newAsteroid == NULL || newAsteroidData == NULL)
+    {
         puts("Can't allocate memory for newAsteroid or newAsteroidData!");
+        exit(2);
+    }
 
     newAsteroidData->color = al_map_rgb(0, 128, 0);
 
-    /* Get a random angle between 0 and 360 */
     newAsteroidData->direction = (*originalAsteroid)->data->direction;
 
     newAsteroidData->twist = 10.0;
-    newAsteroidData->isHitTwice = false;
+    newAsteroidData->isHit = false;
     newAsteroidData->isDupe = true;
     newAsteroidData->hasBeenDuped = false;
 
@@ -129,6 +131,51 @@ void add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
         curr = curr->next;
 
     curr->next = newAsteroid;
+}
+
+void split_in_half(Asteroid **originalAsteroid)
+{
+    if (*originalAsteroid == NULL)
+        return;
+
+    Asteroid *curr = *originalAsteroid;
+    Asteroid *firstAst = malloc(sizeof(Asteroid));
+    Asteroid *secondAst = malloc(sizeof(Asteroid));
+    AsteroidData *firstData = malloc(sizeof(AsteroidData));
+    AsteroidData *secondData = malloc(sizeof(AsteroidData));
+
+    if (firstAst == NULL || secondAst == NULL || firstData == NULL || secondData == NULL)
+    {
+        puts("Can't allocate memory for newAsteroid or newAsteroidData!");
+        exit(2);
+    }
+
+    firstData->color = secondData->color = al_map_rgb(0, 128, 0);
+    firstData->direction = curr->data->direction - 45 >= 0 ? curr->data->direction - 45
+                                                                             : curr->data->direction - 45 + 360;
+    firstData->twist = (secondData->twist = 10.0);
+    firstData->isHit = (secondData->isHit = true);
+    firstData->isDupe = (secondData->isDupe = false);
+    firstData->hasBeenDuped = (secondData->hasBeenDuped = false);
+    secondData->direction = curr->data->direction + 45 <= 360 ? curr->data->direction + 45
+                                                                             : curr->data->direction + 45 - 360;
+
+    for (size_t i = 0; i < NUM_OF_COLUMNS(curr->data->body); i += 1)
+    {
+        firstData->body[0][i] = (secondData->body[0][i] = curr->data->body[0][i]);
+        firstData->body[1][i] = (secondData->body[1][i] = curr->data->body[1][i]);
+    }
+    firstData->centerOfRotation[0][0] = (secondData->centerOfRotation[0][0] = curr->data->centerOfRotation[0][0]);
+    firstData->centerOfRotation[1][0] = (secondData->centerOfRotation[1][0] = curr->data->centerOfRotation[1][0]);
+
+    while (curr->next != NULL)
+        curr = curr->next;
+
+    firstAst->data = firstData;
+    secondAst->data = secondData;
+    curr->next = firstAst;
+    firstAst->next = secondAst;
+    secondAst->next = NULL;
 }
 
 void translate_asteroid(Asteroid **headAsteroid, MainWindow window)

@@ -111,8 +111,8 @@ int main()
      * The coordinates for the asteroid's body represented by a 2x12 matrix
      */
     float body[2][12] = {
-        {10, 5, 5, 20, 25, 35, 50, 50, 30, 50, 40, 30},
-        {50, 35, 20, 20, 10, 10, 20, 25, 30, 40, 50, 45}};
+        {10/1.5, 5/1.5, 5/1.5, 20/1.5, 25/1.5, 35/1.5, 50/1.5, 50/1.5, 30/1.5, 50/1.5, 40/1.5, 30/1.5},
+        {50/1.5, 35/1.5, 20/1.5, 20/1.5, 10/1.5, 10/1.5, 20/1.5, 25/1.5, 30/1.5, 40/1.5, 50/1.5, 45/1.5}};
     for (size_t i = 0; i < NUM_OF_COLUMNS(body); i += 1)
     {
         asteroidData->body[0][i] = body[0][i];
@@ -127,7 +127,7 @@ int main()
 
     asteroidData->direction = 135;
     asteroidData->twist = 10.0;
-    asteroidData->isHitTwice = false;
+    asteroidData->isHit = false;
     asteroidData->isDupe = false;
     asteroidData->hasBeenDuped = false;
     asteroidData->color = al_map_rgb(0, 128, 0);

@@ -65,6 +65,9 @@ void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy);
  */
 void add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy);
 
+/* Split an asteroid into two identical smaller asteroids */
+void split_in_half(Asteroid **originalAsteroid);
+
 /* Rotate each asteroid around itself based on its twist angle */
 void rotate_asteroid(Asteroid **headAsteroid);
 

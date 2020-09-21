@@ -48,7 +48,7 @@ typedef struct AsteroidData
     float centerOfRotation[2][1];
     float direction;
     float twist;
-    bool isHitTwice;
+    bool isHit;
     bool isDupe;
     bool hasBeenDuped;
 

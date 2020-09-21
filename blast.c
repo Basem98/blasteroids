@@ -35,8 +35,7 @@ void translate_blast(Blast **headBlast, Asteroid **asteroids, MainWindow window)
     {
         BlastData *curData = cur->data;
         /* Check if any collision happened between the blast and any of the display's edges */
-        if (((curData->body[0][1] < 0 || curData->body[0][1] > window.width) || (curData->body[1][1] < 0 || curData->body[1][1] > window.height))
-        || (blast_asteroid_coll(&cur, asteroids)))
+        if (((curData->body[0][1] < 0 || curData->body[0][1] > window.width) || (curData->body[1][1] < 0 || curData->body[1][1] > window.height)) || (blast_asteroid_coll(&cur, asteroids)))
         {
             Blast *nextBlast = cur->next;
             if (prev != NULL)
@@ -55,9 +54,6 @@ void translate_blast(Blast **headBlast, Asteroid **asteroids, MainWindow window)
             cur = nextBlast;
             continue;
         }
-
-        
-
 
         determine_direction(curData->direction, &(curData->vx), &(curData->vy), 5.0);
         for (int i = 0; i < 2; i += 1)
@@ -126,15 +122,32 @@ bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids)
             float vc_y = currData->body[1][currVertex];
             float vn_x = currData->body[0][nextVertex];
             float vn_y = currData->body[1][nextVertex];
-            if (((vc_y > py) != (vn_y > py))
-            && (px < (vn_x-vc_x) * (py-vc_y) / (vn_y-vc_y) + vc_x))
+            if (((vc_y > py) != (vn_y > py)) && (px < (vn_x - vc_x) * (py - vc_y) / (vn_y - vc_y) + vc_x))
+            {
                 collision = !collision;
-
+            }
         }
         if (collision)
             break;
+
         prevAst = currAst;
         currAst = currAst->next;
+    }
+    if (collision)
+    {
+        if (!currAst->data->isHit)
+            split_in_half(&currAst);
+
+        if (prevAst)
+        {
+            prevAst->next = currAst->next;
+        }
+        else
+        {
+            *asteroids = currAst->next;
+        }
+        free(currAst->data);
+        free(currAst);
     }
     return collision;
 }
