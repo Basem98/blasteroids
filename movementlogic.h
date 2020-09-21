@@ -81,3 +81,9 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window);
 
 /* Check for collision between each blast and asteroid on screen */
 bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids);
+
+/**
+ * Free Memory
+ */
+/* Free the lists of asteroids and blasts before closing the game */
+void freeLinkedLists(Asteroid **asteroids, Blast **blasts);

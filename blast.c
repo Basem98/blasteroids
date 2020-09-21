@@ -151,3 +151,18 @@ bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids)
     }
     return collision;
 }
+
+void freeLinkedLists(Asteroid **asteroids, Blast **blasts)
+{
+    if (*asteroids == NULL && *blasts == NULL)
+        return;
+
+    Asteroid *nextAst = (*asteroids)->next;
+    Blast *nextBlast = (*blasts)->next;
+
+    free((*asteroids)->data);
+    free((*blasts)->data);
+    free(*asteroids);
+    free(*blasts);
+    freeLinkedLists(&nextAst, &nextBlast);
+}

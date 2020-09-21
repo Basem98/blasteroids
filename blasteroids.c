@@ -236,6 +236,7 @@ int main()
      * Never forget to free the heap
      * from all the dynamic memory that your program used throughout its life cycle!!!
      */
+    freeLinkedLists(&headAsteroid, &headBlast);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
     al_destroy_display(display);
