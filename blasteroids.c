@@ -100,50 +100,17 @@ int main()
         .color = al_map_rgb(0, 128, 0)};
 
     /* The base asteroid */
-    AsteroidData *asteroidData = malloc(sizeof(AsteroidData));
-    if (asteroidData == NULL)
-        error("Can't allocate memory for asteroidData!");
-
-    asteroidData->vx = 2.0;
-    asteroidData->vy = 2.0;
-
-    /**
-     * The coordinates for the asteroid's body represented by a 2x12 matrix
-     */
-    float body[2][12] = {
-        {10/1.5, 5/1.5, 5/1.5, 20/1.5, 25/1.5, 35/1.5, 50/1.5, 50/1.5, 30/1.5, 50/1.5, 40/1.5, 30/1.5},
-        {50/1.5, 35/1.5, 20/1.5, 20/1.5, 10/1.5, 10/1.5, 20/1.5, 25/1.5, 30/1.5, 40/1.5, 50/1.5, 45/1.5}};
-    for (size_t i = 0; i < NUM_OF_COLUMNS(body); i += 1)
-    {
-        asteroidData->body[0][i] = body[0][i];
-        asteroidData->body[1][i] = body[1][i];
-    }
-
-    /**
-     * The center of the asteroid's rotation represented as a vector
-     */
-    asteroidData->centerOfRotation[0][0] = asteroidData->body[0][8];
-    asteroidData->centerOfRotation[0][1] = asteroidData->body[1][8];
-
-    asteroidData->direction = 135;
-    asteroidData->twist = 10.0;
-    asteroidData->isHit = false;
-    asteroidData->isDupe = false;
-    asteroidData->hasBeenDuped = false;
-    asteroidData->color = al_map_rgb(0, 128, 0);
-
-    Asteroid *headAsteroid = malloc(sizeof(Asteroid));
-    if (headAsteroid == NULL)
-        error("Can't allocate memory for headAsteroid!");
-
-    headAsteroid->data = asteroidData;
-    headAsteroid->next = NULL;
+    float centerOfRotation[2][1] = {
+        {240},
+        {220}
+    };
+    Asteroid *headAsteroid = create_new_asteroid(centerOfRotation, 135.0);
 
     /* Add 10 asteroids to start the game with */
     for (int i = 0; i < 5; i += 1)
     {
-        add_asteroid(&headAsteroid, rand() % 361, 610, rand() % 480);
-        add_asteroid(&headAsteroid, rand() % 361, rand() % 640, 450);
+        append_asteroid(&headAsteroid, rand() % 361, 610, rand() % 480);
+        append_asteroid(&headAsteroid, rand() % 361, rand() % 640, 450);
     }
 
     /* The blasts */

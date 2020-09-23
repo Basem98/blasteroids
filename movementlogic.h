@@ -57,13 +57,13 @@ void add_blast(Spaceship ship, Blast **headBlast);
  */
 
 /* Add another asteroid to the end of the list */
-void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy);
+void append_asteroid(Asteroid **headAsteroid);
 
 /**
  * Add a duplicate asteroid that matches the originalAsteroid to the end of the list,
  * but the only visible parts of it will be the parts that are off screen in the originalAsteroid
  */
-void add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy);
+void append_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy);
 
 /* Split an asteroid into two identical smaller asteroids */
 void split_in_half(Asteroid **originalAsteroid);
@@ -74,6 +74,8 @@ void rotate_asteroid(Asteroid **headAsteroid);
 /* Translate each asteroid in the same direction, which is defined in the direction property */
 void translate_asteroid(Asteroid **headAsteroid, MainWindow window);
 
+/* Create a new asteroid around a specific centerOfRotation point */
+Asteroid* create_new_asteroid(float (*centerOfRotation)[1], float direction);
 
 /**
  * Collision Detection

@@ -26,12 +26,11 @@ void draw_asteroids(Asteroid *headAsteroid)
     draw_asteroids(headAsteroid->next);
 }
 
-void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy)
+Asteroid *create_new_asteroid(float (*centerOfRotation)[1], float direction)
 {
-    if (*headAsteroid == NULL)
-        return;
+    if (*centerOfRotation == NULL)
+        return NULL;
 
-    Asteroid *currentAsteroid = *headAsteroid;
     Asteroid *newAsteroid = malloc(sizeof(Asteroid));
     AsteroidData *newAsteroidData = malloc(sizeof(AsteroidData));
     if (newAsteroid == NULL || newAsteroidData == NULL)
@@ -40,31 +39,56 @@ void add_asteroid(Asteroid **headAsteroid, float direction, float vx, float vy)
         exit(2);
     }
 
-    newAsteroidData->color = al_map_rgb(0, 128, 0);
+    /**
+     * The coordinates schema for the initial asteroid that all the asteroids should follow
+     */
+    float body[2][12] = {
+        {10 / 1.5, 5 / 1.5, 5 / 1.5, 20 / 1.5, 25 / 1.5, 35 / 1.5, 50 / 1.5, 50 / 1.5, 30 / 1.5, 50 / 1.5, 40 / 1.5, 30 / 1.5},
+        {50 / 1.5, 35 / 1.5, 20 / 1.5, 20 / 1.5, 10 / 1.5, 10 / 1.5, 20 / 1.5, 25 / 1.5, 30 / 1.5, 40 / 1.5, 50 / 1.5, 45 / 1.5}};
 
-    /* Get a random angle between 0 and 360 */
+    float translationFactor_x = body[0][8] - centerOfRotation[0][0];
+    float translationFactor_y = body[1][8] - centerOfRotation[1][0];
+    translationFactor_x *= -1;
+    translationFactor_y *= -1;
+
+    for (size_t i = 0; i < NUM_OF_COLUMNS(body); i += 1)
+    {
+        newAsteroidData->body[0][i] = body[0][i] + translationFactor_x;
+        newAsteroidData->body[1][i] = body[1][i] + translationFactor_y;
+    }
+
+    /**
+     * The center of the asteroid's rotation represented as a vector
+     */
+    newAsteroidData->centerOfRotation[0][0] = centerOfRotation[0][0];
+    newAsteroidData->centerOfRotation[0][1] = centerOfRotation[1][0];
+
     newAsteroidData->direction = direction;
-
     newAsteroidData->twist = 10.0;
     newAsteroidData->isHit = false;
     newAsteroidData->isDupe = false;
     newAsteroidData->hasBeenDuped = false;
-    newAsteroidData->vx = vx;
-    newAsteroidData->vy = vy;
+    newAsteroidData->color = al_map_rgb(0, 128, 0);
 
-    for (size_t i = 0; i < NUM_OF_COLUMNS(currentAsteroid->data->body); i += 1)
-    {
-        newAsteroidData->body[0][i] = currentAsteroid->data->body[0][i] + vx;
-        newAsteroidData->body[1][i] = currentAsteroid->data->body[1][i] + vy;
-    }
-    newAsteroidData->centerOfRotation[0][0] = currentAsteroid->data->centerOfRotation[0][0] + vx;
-    newAsteroidData->centerOfRotation[1][0] = currentAsteroid->data->centerOfRotation[1][0] + vy;
+    newAsteroid->data = newAsteroidData;
+    newAsteroid->next = NULL;
+    return newAsteroid;
+}
+
+void append_asteroid(Asteroid **headAsteroid)
+{
+    if (*headAsteroid == NULL)
+        return;
+
+    Asteroid *currentAsteroid = *headAsteroid;
+    float centerOfRotation[2][1] = {
+        {320},
+        {0}};
+    Asteroid *newAsteroid = create_new_asteroid(centerOfRotation, rand() % 361);
 
     while (currentAsteroid->next != NULL)
         currentAsteroid = currentAsteroid->next;
 
-    newAsteroid->data = newAsteroidData;
-    newAsteroid->next = NULL;
     currentAsteroid->next = newAsteroid;
 }
 
@@ -90,42 +114,18 @@ void rotate_asteroid(Asteroid **headAsteroid)
     rotate_asteroid(&(*headAsteroid)->next);
 }
 
-void add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
+void append_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
 {
     if (*originalAsteroid == NULL)
         return;
 
     Asteroid *curr = *originalAsteroid;
+    float centerOfRotation[2][1] = {
+        {curr->data->centerOfRotation[0][0] + vx},
+        {curr->data->centerOfRotation[1][0] + vy}};
+    Asteroid *newAsteroid = create_new_asteroid(centerOfRotation, curr->data->direction);
 
-    Asteroid *newAsteroid = malloc(sizeof(Asteroid));
-    AsteroidData *newAsteroidData = malloc(sizeof(AsteroidData));
-
-    if (newAsteroid == NULL || newAsteroidData == NULL)
-    {
-        puts("Can't allocate memory for newAsteroid or newAsteroidData!");
-        exit(2);
-    }
-
-    newAsteroidData->color = al_map_rgb(0, 128, 0);
-
-    newAsteroidData->direction = (*originalAsteroid)->data->direction;
-
-    newAsteroidData->twist = 10.0;
-    newAsteroidData->isHit = false;
-    newAsteroidData->isDupe = true;
-    newAsteroidData->hasBeenDuped = false;
-
-    for (size_t i = 0; i < NUM_OF_COLUMNS((*originalAsteroid)->data->body); i += 1)
-    {
-        newAsteroidData->body[0][i] = (*originalAsteroid)->data->body[0][i] + vx;
-        newAsteroidData->body[1][i] = (*originalAsteroid)->data->body[1][i] + vy;
-    }
-
-    newAsteroidData->centerOfRotation[0][0] = (*originalAsteroid)->data->centerOfRotation[0][0] + vx;
-    newAsteroidData->centerOfRotation[1][0] = (*originalAsteroid)->data->centerOfRotation[1][0] + vy;
-
-    newAsteroid->data = newAsteroidData;
-    newAsteroid->next = NULL;
+    newAsteroid->data->isDupe = true;
 
     while (curr->next != NULL)
         curr = curr->next;
@@ -139,43 +139,23 @@ void split_in_half(Asteroid **originalAsteroid)
         return;
 
     Asteroid *curr = *originalAsteroid;
-    Asteroid *firstAst = malloc(sizeof(Asteroid));
-    Asteroid *secondAst = malloc(sizeof(Asteroid));
-    AsteroidData *firstData = malloc(sizeof(AsteroidData));
-    AsteroidData *secondData = malloc(sizeof(AsteroidData));
+    float centerOfRotation[2][1] = {
+        {curr->data->centerOfRotation[0][0]},
+        {curr->data->centerOfRotation[1][0]}};
+    float firstDirection = curr->data->direction - 45 >= 0 ? curr->data->direction - 45
+                                                           : curr->data->direction - 45 + 360;
+    float secDirection = curr->data->direction + 45 <= 360 ? curr->data->direction + 45
+                                                              : curr->data->direction + 45 - 360;
+    Asteroid *firstAst = create_new_asteroid(centerOfRotation, firstDirection);
+    Asteroid *secondAst = create_new_asteroid(centerOfRotation, secDirection);
 
-    if (firstAst == NULL || secondAst == NULL || firstData == NULL || secondData == NULL)
-    {
-        puts("Can't allocate memory for newAsteroid or newAsteroidData!");
-        exit(2);
-    }
-
-    firstData->color = secondData->color = al_map_rgb(0, 128, 0);
-    firstData->direction = curr->data->direction - 45 >= 0 ? curr->data->direction - 45
-                                                                             : curr->data->direction - 45 + 360;
-    firstData->twist = (secondData->twist = 10.0);
-    firstData->isHit = (secondData->isHit = true);
-    firstData->isDupe = (secondData->isDupe = false);
-    firstData->hasBeenDuped = (secondData->hasBeenDuped = false);
-    secondData->direction = curr->data->direction + 45 <= 360 ? curr->data->direction + 45
-                                                                             : curr->data->direction + 45 - 360;
-
-    for (size_t i = 0; i < NUM_OF_COLUMNS(curr->data->body); i += 1)
-    {
-        firstData->body[0][i] = (secondData->body[0][i] = curr->data->body[0][i]);
-        firstData->body[1][i] = (secondData->body[1][i] = curr->data->body[1][i]);
-    }
-    firstData->centerOfRotation[0][0] = (secondData->centerOfRotation[0][0] = curr->data->centerOfRotation[0][0]);
-    firstData->centerOfRotation[1][0] = (secondData->centerOfRotation[1][0] = curr->data->centerOfRotation[1][0]);
+    firstAst->data->isHit = (secondAst->data->isHit = true);
 
     while (curr->next != NULL)
         curr = curr->next;
 
-    firstAst->data = firstData;
-    secondAst->data = secondData;
     curr->next = firstAst;
     firstAst->next = secondAst;
-    secondAst->next = NULL;
 }
 
 void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
@@ -256,7 +236,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
          */
         if ((isXoffScreen || isYoffScreen) && (!(currData->hasBeenDuped) && !(currData->isDupe)))
         {
-            add_dup_asteroid(&curr, isXoffScreen, isYoffScreen);
+            append_dup_asteroid(&curr, isXoffScreen, isYoffScreen);
             currData->hasBeenDuped = true;
         }
 
