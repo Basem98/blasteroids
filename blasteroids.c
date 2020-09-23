@@ -109,8 +109,8 @@ int main()
     /* Add 10 asteroids to start the game with */
     for (int i = 0; i < 5; i += 1)
     {
-        append_asteroid(&headAsteroid, rand() % 361, 610, rand() % 480);
-        append_asteroid(&headAsteroid, rand() % 361, rand() % 640, 450);
+        append_asteroid(&headAsteroid);
+        append_asteroid(&headAsteroid);
     }
 
     /* The blasts */
