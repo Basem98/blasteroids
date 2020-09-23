@@ -157,12 +157,22 @@ void freeLinkedLists(Asteroid **asteroids, Blast **blasts)
     if (*asteroids == NULL && *blasts == NULL)
         return;
 
-    Asteroid *nextAst = (*asteroids)->next;
-    Blast *nextBlast = (*blasts)->next;
+    Asteroid *currAst = *asteroids;
+    Blast *currBlast = *blasts;
 
-    free((*asteroids)->data);
-    free((*blasts)->data);
-    free(*asteroids);
-    free(*blasts);
-    freeLinkedLists(&nextAst, &nextBlast);
+    while (currAst != NULL)
+    {
+        Asteroid *nextAst = currAst->next;
+        free(currAst->data);
+        free(currAst);
+        currAst = nextAst;
+    }
+
+    while (currBlast != NULL)
+    {
+        Blast *nextBlast = currBlast->next;
+        free(currBlast->data);
+        free(currBlast);
+        currBlast = nextBlast;
+    }
 }
