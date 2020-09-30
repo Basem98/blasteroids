@@ -209,8 +209,11 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
          * If the dupe asteroid is completely on screen now, stop treating it as a dupe,
          * in order to duplicate when it itself starts getting off the screen
          */
-        if (isCompletelyOnScreen && (currData->isDupe))
+        if (isCompletelyOnScreen)
+        {
             currData->isDupe = false;
+            currData->hasBeenDuped = false;
+        }
 
         /** 
          * If all of the asteroid's body is off screen, then delete it and free the memory
