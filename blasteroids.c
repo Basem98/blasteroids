@@ -36,9 +36,9 @@ int main()
         error("Can't initialize font addon");
 
     /**
-     * Create the game's main timer that ticks 30 tick per second
+     * Create the game's main timer that ticks 60 tick per second
      */
-    ALLEGRO_TIMER *timer = al_create_timer(1.0 / 30.0);
+    ALLEGRO_TIMER *timer = al_create_timer(1.0 / 60.0);
     if (!timer)
         error("Can't create game timer");
 
@@ -144,7 +144,7 @@ int main()
         case ALLEGRO_EVENT_TIMER:
         {
             /**
-             * The game's logic is calculated here exactly every 1/30th of a second (30 ticks per sec)
+             * The game's logic is calculated here exactly every 1/60th of a second (60 ticks per sec)
              */
             rotate_asteroid(&headAsteroid);
             translate_asteroid(&headAsteroid, window);
