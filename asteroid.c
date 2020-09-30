@@ -114,7 +114,7 @@ void rotate_asteroid(Asteroid **headAsteroid)
     rotate_asteroid(&(*headAsteroid)->next);
 }
 
-void append_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
+void add_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
 {
     if (*originalAsteroid == NULL)
         return;
@@ -125,11 +125,10 @@ void append_dup_asteroid(Asteroid **originalAsteroid, float vx, float vy)
         {curr->data->centerOfRotation[1][0] + vy}};
     Asteroid *newAsteroid = create_new_asteroid(centerOfRotation, curr->data->direction);
 
+    curr->data->hasBeenDuped = true;
     newAsteroid->data->isDupe = true;
 
-    while (curr->next != NULL)
-        curr = curr->next;
-
+    newAsteroid->next = curr->next;
     curr->next = newAsteroid;
 }
 
@@ -239,8 +238,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
          */
         if ((isXoffScreen || isYoffScreen) && (!(currData->hasBeenDuped) && !(currData->isDupe)))
         {
-            append_dup_asteroid(&curr, isXoffScreen, isYoffScreen);
-            currData->hasBeenDuped = true;
+            add_dup_asteroid(&curr, isXoffScreen, isYoffScreen);
         }
 
         prev = curr;
