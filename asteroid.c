@@ -97,21 +97,25 @@ void rotate_asteroid(Asteroid **headAsteroid)
     if (*headAsteroid == NULL)
         return;
 
-    float oldX;
-    float oldY;
-
-    for (size_t i = 0; i < NUM_OF_COLUMNS((*headAsteroid)->data->body); i += 1)
+    Asteroid *curr = *headAsteroid;
+    while (curr != NULL)
     {
-        oldX = (*headAsteroid)->data->body[0][i];
-        oldY = (*headAsteroid)->data->body[1][i];
+        float oldX;
+        float oldY;
 
-        (*headAsteroid)->data->body[0][i] = rotate_x_cw(oldX, oldY, (*headAsteroid)->data->centerOfRotation);
-        (*headAsteroid)->data->body[1][i] = rotate_y_cw(oldX, oldY, (*headAsteroid)->data->centerOfRotation);
+        for (size_t i = 0; i < NUM_OF_COLUMNS((*headAsteroid)->data->body); i += 1)
+        {
+            oldX = curr->data->body[0][i];
+            oldY = curr->data->body[1][i];
+
+            curr->data->body[0][i] = rotate_x_cw(oldX, oldY, curr->data->centerOfRotation);
+            curr->data->body[1][i] = rotate_y_cw(oldX, oldY, curr->data->centerOfRotation);
+        }
+        curr->data->direction = curr->data->direction > 360 ? curr->data->direction - 360 : curr->data->direction;
+        curr->data->direction = curr->data->direction < 0 ? curr->data->direction + 360 : curr->data->direction;
+
+        curr = curr->next;
     }
-    (*headAsteroid)->data->direction = (*headAsteroid)->data->direction > 360 ? (*headAsteroid)->data->direction - 360 : (*headAsteroid)->data->direction;
-    (*headAsteroid)->data->direction = (*headAsteroid)->data->direction < 0 ? (*headAsteroid)->data->direction + 360 : (*headAsteroid)->data->direction;
-
-    rotate_asteroid(&(*headAsteroid)->next);
 }
 
 void add_dup_asteroid(Asteroid **originalAsteroid)
