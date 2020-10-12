@@ -202,7 +202,6 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
         if (isCompletelyOnScreen)
         {
             currData->isDupe = false;
-            currData->hasBeenDuped = false;
         }
 
         /** 
