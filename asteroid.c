@@ -233,9 +233,6 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
             currData->vy = (currData->centerOfRotation[1][0] - 30) <= 0 ? window.height
                                                                         : (currData->centerOfRotation[1][0] + 30) >= window.height ? -1 * window.height : 0;
 
-            currData->vy = (currData->centerOfRotation[1][0] - 20) < 0 ? window.height
-                : (currData->centerOfRotation[1][0] + 20) > window.height ? -1 * window.height : 0;
-
             if (currData->vx || currData->vy)
             {
             add_dup_asteroid(&curr);
