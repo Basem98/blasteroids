@@ -136,7 +136,10 @@ bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids)
     if (collision)
     {
         if (!currAst->data->isHit)
+        {
             split_in_half(&currAst);
+            append_asteroid(&currAst);
+        }
 
         if (prevAst)
         {
