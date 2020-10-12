@@ -81,10 +81,18 @@ void append_asteroid(Asteroid **headAsteroid)
         return;
 
     Asteroid *currentAsteroid = *headAsteroid;
-    float centerOfRotation[2][1] = {
-        {320},
-        {0}};
-    Asteroid *newAsteroid = create_new_asteroid(centerOfRotation, rand() % 361);
+    float possibleAngles[4] =  {45, 135, 225, 315};
+    float possibleCenters[2][4] = {
+        {0, 0, 640, 640},
+        {480, 0, 0, 480}
+    };
+    int index = rand() % 4;
+    float angle;
+    float centerOfRotation[2][1];
+    centerOfRotation[0][0] = possibleCenters[0][index];
+    centerOfRotation[1][0] = possibleCenters[1][index];
+    angle = possibleAngles[index];
+    Asteroid *newAsteroid = create_new_asteroid(centerOfRotation, angle);
 
     while (currentAsteroid->next != NULL)
         currentAsteroid = currentAsteroid->next;
