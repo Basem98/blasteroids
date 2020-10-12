@@ -155,11 +155,9 @@ void split_in_half(Asteroid **originalAsteroid)
 
     firstAst->data->isHit = (secondAst->data->isHit = true);
 
-    while (curr->next != NULL)
-        curr = curr->next;
-
-    curr->next = firstAst;
+    secondAst->next = curr->next;
     firstAst->next = secondAst;
+    curr->next = firstAst;
 }
 
 void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
