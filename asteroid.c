@@ -81,6 +81,12 @@ void append_asteroid(Asteroid **headAsteroid)
         return;
 
     Asteroid *currentAsteroid = *headAsteroid;
+
+    /**
+     * Create a list of 4 different angles
+     * each one with an index corresponding to the number of a column,
+     * which represents its appropriate vertex in the 2x4 possibleCenters matrix
+     */
     float possibleAngles[4] =  {45, 135, 225, 315};
     float possibleCenters[2][4] = {
         {0, 0, 640, 640},
@@ -92,6 +98,7 @@ void append_asteroid(Asteroid **headAsteroid)
     centerOfRotation[0][0] = possibleCenters[0][index];
     centerOfRotation[1][0] = possibleCenters[1][index];
     angle = possibleAngles[index];
+
     Asteroid *newAsteroid = create_new_asteroid(centerOfRotation, angle);
 
     while (currentAsteroid->next != NULL)
