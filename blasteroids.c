@@ -101,17 +101,10 @@ int main()
 
     /* The base asteroid */
     float centerOfRotation[2][1] = {
-        {240},
-        {220}
+        {20},
+        {20}
     };
     Asteroid *headAsteroid = create_new_asteroid(centerOfRotation, 135.0);
-
-    /* Add 10 asteroids to start the game with */
-    for (int i = 0; i < 5; i += 1)
-    {
-        append_asteroid(&headAsteroid);
-        append_asteroid(&headAsteroid);
-    }
 
     /* The blasts */
     Blast *headBlast = NULL;
