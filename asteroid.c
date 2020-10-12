@@ -89,8 +89,8 @@ void append_asteroid(Asteroid **headAsteroid)
      */
     float possibleAngles[4] =  {45, 135, 225, 315};
     float possibleCenters[2][4] = {
-        {0, 0, 640, 640},
-        {480, 0, 0, 480}
+        {20, 20, 620, 620},
+        {460, 20, 20, 460}
     };
     int index = rand() % 4;
     float angle;
