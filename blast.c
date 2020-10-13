@@ -55,7 +55,7 @@ void translate_blast(Blast **headBlast, Asteroid **asteroids, MainWindow window)
             continue;
         }
 
-        determine_direction(curData->direction, &(curData->vx), &(curData->vy), 5.0);
+        determine_direction(curData->direction, &(curData->vx), &(curData->vy), 7.0);
         for (int i = 0; i < 2; i += 1)
         {
             /* Translate both of the blast's axes */
