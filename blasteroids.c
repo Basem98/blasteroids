@@ -97,7 +97,7 @@ int main()
          */
         .centerOfRotation = {{160.0}, {135.0}},
         .direction = 0.0,
-        .color = al_map_rgb(0, 128, 0)};
+        .color = al_map_rgb(255, 255, 255)};
 
     /* The base asteroid */
     float centerOfRotation[2][1] = {

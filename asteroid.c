@@ -68,7 +68,7 @@ Asteroid *create_new_asteroid(float (*centerOfRotation)[1], float direction)
     newAsteroidData->isHit = false;
     newAsteroidData->isDupe = false;
     newAsteroidData->hasBeenDuped = false;
-    newAsteroidData->color = al_map_rgb(0, 128, 0);
+    newAsteroidData->color = al_map_rgb(255, 0, 0);
 
     newAsteroid->data = newAsteroidData;
     newAsteroid->next = NULL;
