@@ -14,14 +14,8 @@
 #include "myMacros.h"
 
 
-#define PI 3.14159265359
 #define ROTATION_ANGLE 10.0
 
-/**
- * Convert the angle to radiants before calling sin or cos
- */
-#define COS(x) cosf(x *(PI / 180))
-#define SIN(x) sinf(x *(PI / 180))
 
 /**
  * The transformation matrices for clock-wise and counter clock-wise rotation

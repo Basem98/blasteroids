@@ -139,11 +139,24 @@ void add_dup_asteroid(Asteroid **originalAsteroid)
         return;
 
     Asteroid *curr = *originalAsteroid;
-    float centerOfRotation[2][1] = {
-        {curr->data->centerOfRotation[0][0] + curr->data->vx},
-        {curr->data->centerOfRotation[1][0] + curr->data->vy}};
+    float direction = curr->data->direction;
+    float dupeCenterOfRotation[2][1] = {
+        {fabs(640 - curr->data->centerOfRotation[0][0])},
+        {fabs(480 - curr->data->centerOfRotation[1][0])}
+    };
 
-    Asteroid *newAsteroid = create_new_asteroid(centerOfRotation, curr->data->direction);
+    /* Make sure the asteroid keeps moving in a straight line if the original direction is 0, 90, 180, 270 or 360 */
+
+    dupeCenterOfRotation[0][0] = fabs(COS(direction)) == 1 ? curr->data->centerOfRotation[0][0] : dupeCenterOfRotation[0][0];
+    dupeCenterOfRotation[1][0] = fabs(SIN(direction)) == 1 ? curr->data->centerOfRotation[1][0] : dupeCenterOfRotation[1][0];
+
+    /* Make the asteroid appear gradually on the other side of the screen, instead of just popping out of nowhere */
+
+    determine_direction(direction, &(curr->data->vx), &(curr->data->vy), 30.0);
+    dupeCenterOfRotation[0][0] += (-1 * curr->data->vx);
+    dupeCenterOfRotation[1][0] += (-1 * curr->data->vy);
+
+    Asteroid *newAsteroid = create_new_asteroid(dupeCenterOfRotation, direction);
 
     curr->data->hasBeenDuped = true;
     newAsteroid->data->isDupe = true;
@@ -241,17 +254,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
          */
         if (!isCompletelyOnScreen && !((currData->hasBeenDuped) || (currData->isDupe)))
         {
-
-            currData->vx = (currData->centerOfRotation[0][0] - 30) <= 0 ? window.width
-                                                                        : (currData->centerOfRotation[0][0] + 30) >= window.width ? -1 * window.width : 0;
-
-            currData->vy = (currData->centerOfRotation[1][0] - 30) <= 0 ? window.height
-                                                                        : (currData->centerOfRotation[1][0] + 30) >= window.height ? -1 * window.height : 0;
-
-            if (currData->vx || currData->vy)
-            {
             add_dup_asteroid(&curr);
-            }
         }
 
         prev = curr;
