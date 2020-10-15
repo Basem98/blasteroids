@@ -101,8 +101,8 @@ int main()
 
     /* The base asteroid */
     float centerOfRotation[2][1] = {
-        {20},
-        {20}
+        {19},
+        {19}
     };
     Asteroid *headAsteroid = create_new_asteroid(centerOfRotation, 135.0);
 

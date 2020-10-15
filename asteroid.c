@@ -2,6 +2,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <math.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include "gameObjects.h"
@@ -233,7 +234,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
         /** 
          * If all of the asteroid's body is off screen, then delete it and free the memory
          */
-        if ((isCompletelyOffScreen && currData->hasBeenDuped) || ((currData->centerOfRotation[0][0] + 30 < 0 || currData->centerOfRotation[0][0] - 30 > window.width) || (currData->centerOfRotation[1][0] + 30 < 0 || currData->centerOfRotation[1][0] - 30 > window.height)))
+        if ((isCompletelyOffScreen && currData->hasBeenDuped) || ((currData->centerOfRotation[0][0] + 19 < 0 || currData->centerOfRotation[0][0] - 19 > window.width) || (currData->centerOfRotation[1][0] + 19 < 0 || currData->centerOfRotation[1][0] - 19 > window.height)))
         {
             Asteroid *next = curr->next;
 
