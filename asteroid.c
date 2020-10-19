@@ -88,11 +88,10 @@ void append_asteroid(Asteroid **headAsteroid)
      * each one with an index corresponding to the number of a column,
      * which represents its appropriate vertex in the 2x4 possibleCenters matrix
      */
-    float possibleAngles[4] =  {45, 135, 225, 315};
+    float possibleAngles[4] = {45, 135, 225, 315};
     float possibleCenters[2][4] = {
         {20, 20, 620, 620},
-        {460, 20, 20, 460}
-    };
+        {460, 20, 20, 460}};
     int index = rand() % 4;
     float angle;
     float centerOfRotation[2][1];
@@ -143,22 +142,26 @@ void add_dup_asteroid(Asteroid **originalAsteroid)
     float direction = curr->data->direction;
     float dupeCenterOfRotation[2][1] = {
         {fabs(640 - curr->data->centerOfRotation[0][0])},
-        {fabs(480 - curr->data->centerOfRotation[1][0])}
-    };
+        {fabs(480 - curr->data->centerOfRotation[1][0])}};
 
     /* Make sure the asteroid keeps moving in a straight line if the original direction is 0, 90, 180, 270 or 360 */
-
     dupeCenterOfRotation[0][0] = fabs(COS(direction)) == 1 ? curr->data->centerOfRotation[0][0] : dupeCenterOfRotation[0][0];
     dupeCenterOfRotation[1][0] = fabs(SIN(direction)) == 1 ? curr->data->centerOfRotation[1][0] : dupeCenterOfRotation[1][0];
 
     /* Make the asteroid appear gradually on the other side of the screen, instead of just popping out of nowhere */
+    determine_direction(direction, &(curr->data->vx), &(curr->data->vy), 25.0);
+    dupeCenterOfRotation[0][0] += ((curr->data->vx / fabs(SIN(direction))));
+    dupeCenterOfRotation[1][0] += ((curr->data->vy / fabs(COS(direction))));
 
-    determine_direction(direction, &(curr->data->vx), &(curr->data->vy), 30.0);
-    dupeCenterOfRotation[0][0] += (-1 * curr->data->vx);
-    dupeCenterOfRotation[1][0] += (-1 * curr->data->vy);
+    if (dupeCenterOfRotation[0][0] >= 640 || dupeCenterOfRotation[0][0] <= 0 || dupeCenterOfRotation[1][0] >= 640 || dupeCenterOfRotation[1][0] <= 0)
+        return;
+    else
+    {
+        dupeCenterOfRotation[0][0] += (-2 * (curr->data->vx / fabs(SIN(direction))));
+        dupeCenterOfRotation[1][0] += (-2 * (curr->data->vy / fabs(COS(direction))));
+    }
 
     Asteroid *newAsteroid = create_new_asteroid(dupeCenterOfRotation, direction);
-
     curr->data->hasBeenDuped = true;
     newAsteroid->data->isDupe = true;
 
@@ -212,7 +215,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
             currData->body[0][i] += currData->vx;
             currData->body[1][i] += currData->vy;
 
-            if ((currData->body[0][i] < 0 || currData->body[0][i] > window.width) || (currData->body[1][i] < 0 || currData->body[1][i] > window.height))
+            if ((currData->body[0][i] <= 0 || currData->body[0][i] >= window.width) || (currData->body[1][i] <= 0 || currData->body[1][i] >= window.height))
             {
                 isCompletelyOnScreen = false;
                 continue;
