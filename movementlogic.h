@@ -63,7 +63,7 @@ void append_asteroid(Asteroid **headAsteroid);
  * Add a duplicate asteroid that matches the originalAsteroid to the end of the list,
  * but the only visible parts of it will be the parts that are off screen in the originalAsteroid
  */
-void add_dup_asteroid(Asteroid **originalAsteroid);
+void add_dup_asteroid(Asteroid **originalAsteroid, MainWindow window);
 
 /* Split an asteroid into two identical smaller asteroids */
 void split_in_half(Asteroid **originalAsteroid);

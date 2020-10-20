@@ -133,7 +133,7 @@ void rotate_asteroid(Asteroid **headAsteroid)
     }
 }
 
-void add_dup_asteroid(Asteroid **originalAsteroid)
+void add_dup_asteroid(Asteroid **originalAsteroid, MainWindow window)
 {
     if (*originalAsteroid == NULL)
         return;
@@ -141,8 +141,8 @@ void add_dup_asteroid(Asteroid **originalAsteroid)
     Asteroid *curr = *originalAsteroid;
     float direction = curr->data->direction;
     float dupeCenterOfRotation[2][1] = {
-        {fabs(640 - curr->data->centerOfRotation[0][0])},
-        {fabs(480 - curr->data->centerOfRotation[1][0])}};
+        {fabs(window.width - curr->data->centerOfRotation[0][0])},
+        {fabs(window.height - curr->data->centerOfRotation[1][0])}};
 
     /* Make sure the asteroid keeps moving in a straight line if the original direction is 0, 90, 180, 270 or 360 */
     dupeCenterOfRotation[0][0] = fabs(COS(direction)) == 1 ? curr->data->centerOfRotation[0][0] : dupeCenterOfRotation[0][0];
@@ -153,7 +153,7 @@ void add_dup_asteroid(Asteroid **originalAsteroid)
     dupeCenterOfRotation[0][0] += ((curr->data->vx / fabs(SIN(direction))));
     dupeCenterOfRotation[1][0] += ((curr->data->vy / fabs(COS(direction))));
 
-    if (dupeCenterOfRotation[0][0] >= 640 || dupeCenterOfRotation[0][0] <= 0 || dupeCenterOfRotation[1][0] >= 640 || dupeCenterOfRotation[1][0] <= 0)
+    if (dupeCenterOfRotation[0][0] >= window.width || dupeCenterOfRotation[0][0] <= 0 || dupeCenterOfRotation[1][0] >= window.height || dupeCenterOfRotation[1][0] <= 0)
         return;
     else
     {
@@ -258,7 +258,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
          */
         if (!isCompletelyOnScreen && !((currData->hasBeenDuped) || (currData->isDupe)))
         {
-            add_dup_asteroid(&curr);
+            add_dup_asteroid(&curr, window);
         }
 
         prev = curr;
