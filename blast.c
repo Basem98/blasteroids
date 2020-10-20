@@ -23,7 +23,7 @@ void draw_blasts(Blast *headBlast)
     draw_blasts(headBlast->next);
 }
 
-void translate_blast(Blast **headBlast, Asteroid **asteroids, MainWindow window)
+void translate_blast(Blast **headBlast, Asteroid **asteroids, Display gameDisplay)
 {
     if (*headBlast == NULL)
         return;
@@ -35,7 +35,7 @@ void translate_blast(Blast **headBlast, Asteroid **asteroids, MainWindow window)
     {
         BlastData *curData = cur->data;
         /* Check if any collision happened between the blast and any of the display's edges, or any collision with the asteroids */
-        if (((curData->body[0][1] < 0 || curData->body[0][1] > window.width) || (curData->body[1][1] < 0 || curData->body[1][1] > window.height)) || (blast_asteroid_coll(&cur, asteroids)))
+        if (((curData->body[0][1] < 0 || curData->body[0][1] > gameDisplay.width) || (curData->body[1][1] < 0 || curData->body[1][1] > gameDisplay.height)) || (blast_asteroid_coll(&cur, asteroids)))
         {
             Blast *nextBlast = cur->next;
             if (prev != NULL)

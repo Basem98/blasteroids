@@ -133,7 +133,7 @@ void rotate_asteroid(Asteroid **headAsteroid)
     }
 }
 
-void add_dup_asteroid(Asteroid **originalAsteroid, MainWindow window)
+void add_dup_asteroid(Asteroid **originalAsteroid, Display gameDisplay)
 {
     if (*originalAsteroid == NULL)
         return;
@@ -141,8 +141,8 @@ void add_dup_asteroid(Asteroid **originalAsteroid, MainWindow window)
     Asteroid *curr = *originalAsteroid;
     float direction = curr->data->direction;
     float dupeCenterOfRotation[2][1] = {
-        {fabs(window.width - curr->data->centerOfRotation[0][0])},
-        {fabs(window.height - curr->data->centerOfRotation[1][0])}};
+        {fabs(gameDisplay.width - curr->data->centerOfRotation[0][0])},
+        {fabs(gameDisplay.height - curr->data->centerOfRotation[1][0])}};
 
     /* Make sure the asteroid keeps moving in a straight line if the original direction is 0, 90, 180, 270 or 360 */
     dupeCenterOfRotation[0][0] = fabs(COS(direction)) == 1 ? curr->data->centerOfRotation[0][0] : dupeCenterOfRotation[0][0];
@@ -153,7 +153,7 @@ void add_dup_asteroid(Asteroid **originalAsteroid, MainWindow window)
     dupeCenterOfRotation[0][0] += ((curr->data->vx / fabs(SIN(direction))));
     dupeCenterOfRotation[1][0] += ((curr->data->vy / fabs(COS(direction))));
 
-    if (dupeCenterOfRotation[0][0] >= window.width || dupeCenterOfRotation[0][0] <= 0 || dupeCenterOfRotation[1][0] >= window.height || dupeCenterOfRotation[1][0] <= 0)
+    if (dupeCenterOfRotation[0][0] >= gameDisplay.width || dupeCenterOfRotation[0][0] <= 0 || dupeCenterOfRotation[1][0] >= gameDisplay.height || dupeCenterOfRotation[1][0] <= 0)
         return;
     else
     {
@@ -192,7 +192,7 @@ void split_in_half(Asteroid **originalAsteroid)
     curr->next = firstAst;
 }
 
-void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
+void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay)
 {
     if (headAsteroid == NULL || *headAsteroid == NULL)
         return;
@@ -215,7 +215,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
             currData->body[0][i] += currData->vx;
             currData->body[1][i] += currData->vy;
 
-            if ((currData->body[0][i] <= 0 || currData->body[0][i] >= window.width) || (currData->body[1][i] <= 0 || currData->body[1][i] >= window.height))
+            if ((currData->body[0][i] <= 0 || currData->body[0][i] >= gameDisplay.width) || (currData->body[1][i] <= 0 || currData->body[1][i] >= gameDisplay.height))
             {
                 isCompletelyOnScreen = false;
                 continue;
@@ -237,7 +237,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
         /** 
          * If all of the asteroid's body is off screen, then delete it and free the memory
          */
-        if ((isCompletelyOffScreen && currData->hasBeenDuped) || ((currData->centerOfRotation[0][0] + 19 < 0 || currData->centerOfRotation[0][0] - 19 > window.width) || (currData->centerOfRotation[1][0] + 19 < 0 || currData->centerOfRotation[1][0] - 19 > window.height)))
+        if ((isCompletelyOffScreen && currData->hasBeenDuped) || ((currData->centerOfRotation[0][0] + 19 < 0 || currData->centerOfRotation[0][0] - 19 > gameDisplay.width) || (currData->centerOfRotation[1][0] + 19 < 0 || currData->centerOfRotation[1][0] - 19 > gameDisplay.height)))
         {
             Asteroid *next = curr->next;
 
@@ -258,7 +258,7 @@ void translate_asteroid(Asteroid **headAsteroid, MainWindow window)
          */
         if (!isCompletelyOnScreen && !((currData->hasBeenDuped) || (currData->isDupe)))
         {
-            add_dup_asteroid(&curr, window);
+            add_dup_asteroid(&curr, gameDisplay);
         }
 
         prev = curr;

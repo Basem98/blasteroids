@@ -58,11 +58,12 @@ int main()
     /**
      * The dimensions for the initial display
      */
-    MainWindow window = {.width = 640, .height = 480};
+    Display mainDisplay = {.width = 640, .height = 600};
+    Display gameDisplay = {.width = 640, .height = 480};
     ALLEGRO_DISPLAY *display;
 
-    if (!(display = al_create_display(window.width, window.height)))
-        error("Can't draw main window");
+    if (!(display = al_create_display(mainDisplay.width, mainDisplay.height)))
+        error("Can't draw main display");
 
     /**
      * Antialiasing
@@ -140,8 +141,8 @@ int main()
              * The game's logic is calculated here exactly every 1/60th of a second (60 ticks per sec)
              */
             rotate_asteroid(&headAsteroid);
-            translate_asteroid(&headAsteroid, window);
-            translate_blast(&headBlast, &headAsteroid, window);
+            translate_asteroid(&headAsteroid, gameDisplay);
+            translate_blast(&headBlast, &headAsteroid, gameDisplay);
             reRender = true;
             break;
         }
@@ -159,7 +160,7 @@ int main()
             }
             if (event.keyboard.keycode == ALLEGRO_KEY_UP)
             {
-                translate_ship(&ship, window);
+                translate_ship(&ship, gameDisplay);
             }
             if (event.keyboard.keycode == ALLEGRO_KEY_SPACE)
             {

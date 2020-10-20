@@ -38,7 +38,7 @@ void determine_direction(float direction, float *vx, float *vy, float velocity);
  */
 
 /* Translate the ship in the direction it's headed */
-void translate_ship(Spaceship *ship, MainWindow window);
+void translate_ship(Spaceship *ship, Display gameDisplay);
 
 
 /**
@@ -46,7 +46,7 @@ void translate_ship(Spaceship *ship, MainWindow window);
  */
 
 /* Translate each blast in the direction it's headed */
-void translate_blast(Blast **headBlast, Asteroid **asteroids, MainWindow window);
+void translate_blast(Blast **headBlast, Asteroid **asteroids, Display gameDisplay);
 
 /* Add another blast! */
 void add_blast(Spaceship ship, Blast **headBlast);
@@ -63,7 +63,7 @@ void append_asteroid(Asteroid **headAsteroid);
  * Add a duplicate asteroid that matches the originalAsteroid to the end of the list,
  * but the only visible parts of it will be the parts that are off screen in the originalAsteroid
  */
-void add_dup_asteroid(Asteroid **originalAsteroid, MainWindow window);
+void add_dup_asteroid(Asteroid **originalAsteroid, Display gameDisplay);
 
 /* Split an asteroid into two identical smaller asteroids */
 void split_in_half(Asteroid **originalAsteroid);
@@ -72,7 +72,7 @@ void split_in_half(Asteroid **originalAsteroid);
 void rotate_asteroid(Asteroid **headAsteroid);
 
 /* Translate each asteroid in the same direction, which is defined in the direction property */
-void translate_asteroid(Asteroid **headAsteroid, MainWindow window);
+void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay);
 
 /* Create a new asteroid around a specific centerOfRotation point */
 Asteroid* create_new_asteroid(float (*centerOfRotation)[1], float direction);

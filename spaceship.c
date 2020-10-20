@@ -164,13 +164,13 @@ void determine_direction(float direction, float *vx, float *vy, float velocity)
     }
 }
 
-void translate_ship(Spaceship *ship, MainWindow window)
+void translate_ship(Spaceship *ship, Display gameDisplay)
 {
     determine_direction(ship->direction, &(ship->vx), &(ship->vy), 5.0);
     /**
      * Check if the head of the ship has reached any of the display's edges before translating it any further
     */
-    if (((ship->head[0][0] + ship->vx) > window.width || (ship->head[0][0] + ship->vx) < 0) || ((ship->head[1][0] + ship->vy) > window.height || (ship->head[1][0] + ship->vy) < 0))
+    if (((ship->head[0][0] + ship->vx) > gameDisplay.width || (ship->head[0][0] + ship->vx) < 0) || ((ship->head[1][0] + ship->vy) > gameDisplay.height || (ship->head[1][0] + ship->vy) < 0))
         return;
 
     ship->head[0][0] += ship->vx;

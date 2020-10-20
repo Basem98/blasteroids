@@ -3,12 +3,12 @@
 */
 
 
-/* The dimensions for the game's display window */
-typedef struct MainWindow
+/* The dimensions for any display  */
+typedef struct Display
 {
     const int width;
     const int height;
-} MainWindow;
+} Display;
 
 
 /* The Spaceship */
