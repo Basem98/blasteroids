@@ -192,14 +192,14 @@ void split_in_half(Asteroid **originalAsteroid)
     curr->next = firstAst;
 }
 
-void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay)
+void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids)
 {
     if (headAsteroid == NULL || *headAsteroid == NULL)
         return;
 
     Asteroid *curr = *headAsteroid;
     Asteroid *prev = NULL;
-
+    int numOfAsteroids = 0;
     while (curr != NULL)
     {
         bool isCompletelyOnScreen = true;
@@ -248,7 +248,7 @@ void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay)
 
             free(currData);
             free(curr);
-
+            numOfAsteroids -= 1;
             curr = next;
             continue;
         }
@@ -263,5 +263,7 @@ void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay)
 
         prev = curr;
         curr = curr->next;
+        numOfAsteroids += 1;
     }
+    *currentAsteroids = numOfAsteroids;
 }

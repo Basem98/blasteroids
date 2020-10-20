@@ -58,7 +58,7 @@ int main()
     /**
      * The dimensions for the initial display
      */
-    Display mainDisplay = {.width = 640, .height = 600};
+    Display mainDisplay = {.width = 640, .height = 540};
     Display gameDisplay = {.width = 640, .height = 480};
     ALLEGRO_DISPLAY *display;
 
@@ -78,6 +78,14 @@ int main()
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_register_event_source(queue, al_get_display_event_source(display));
+
+    /* Player Info */
+    int currentScore = 0;
+    char scoreInfo[100];
+    int currentLives = 3;
+    char lifeInfo[100];
+    int currentAsteroids = 1;
+    char asteroidsInfo[100];
 
     /* The Spaceship */
     Spaceship ship = {
@@ -103,8 +111,7 @@ int main()
     /* The base asteroid */
     float centerOfRotation[2][1] = {
         {19},
-        {19}
-    };
+        {19}};
     Asteroid *headAsteroid = create_new_asteroid(centerOfRotation, 135.0);
 
     /* The blasts */
@@ -141,8 +148,12 @@ int main()
              * The game's logic is calculated here exactly every 1/60th of a second (60 ticks per sec)
              */
             rotate_asteroid(&headAsteroid);
-            translate_asteroid(&headAsteroid, gameDisplay);
-            translate_blast(&headBlast, &headAsteroid, gameDisplay);
+            translate_asteroid(&headAsteroid, gameDisplay, &currentAsteroids);
+            translate_blast(&headBlast, &headAsteroid, gameDisplay, &currentScore);
+            sprintf(scoreInfo, "Score: %i", currentScore);
+            sprintf(lifeInfo, "Remaining Lives: %i", currentLives);
+            sprintf(asteroidsInfo, "Number of Asteroids: %i", currentAsteroids);
+
             reRender = true;
             break;
         }
@@ -188,6 +199,10 @@ int main()
             draw_ship(&ship);
             draw_asteroids(headAsteroid);
             draw_blasts(headBlast);
+            al_draw_filled_rectangle(0, gameDisplay.height, mainDisplay.width, mainDisplay.height, al_map_rgba(255, 255, 255, 1));
+            al_draw_text(font, al_map_rgb(0, 0, 0), 20, gameDisplay.height + 20, 0, scoreInfo);
+            al_draw_text(font, al_map_rgb(0, 0, 0), 20, gameDisplay.height + 40, 0, asteroidsInfo);
+            al_draw_text(font, al_map_rgb(0, 0, 0), (mainDisplay.width - (8 * (int) strlen(lifeInfo)) - 20), gameDisplay.height + 20, 0, lifeInfo);
             al_flip_display();
             reRender = false;
         }
