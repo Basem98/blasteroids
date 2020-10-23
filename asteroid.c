@@ -192,7 +192,7 @@ void split_in_half(Asteroid **originalAsteroid)
     curr->next = firstAst;
 }
 
-void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids)
+void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids, int currentScore)
 {
     if (headAsteroid == NULL || *headAsteroid == NULL)
         return;
@@ -200,6 +200,7 @@ void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *curre
     Asteroid *curr = *headAsteroid;
     Asteroid *prev = NULL;
     int numOfAsteroids = 0;
+    float speed = currentScore / 250.0 < 1.0 ? 1.0 : currentScore / 250.0;
     while (curr != NULL)
     {
         bool isCompletelyOnScreen = true;
@@ -207,7 +208,7 @@ void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *curre
 
         AsteroidData *currData = curr->data;
 
-        determine_direction(currData->direction, &(currData->vx), &(currData->vy), 1.0);
+        determine_direction(currData->direction, &(currData->vx), &(currData->vy), speed);
 
         /* Translate the asteroid and check for collisions with the borders */
         for (size_t i = 0; i < NUM_OF_COLUMNS(currData->body); i += 1)

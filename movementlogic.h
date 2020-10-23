@@ -46,7 +46,7 @@ void translate_ship(Spaceship *ship, Display gameDisplay);
  */
 
 /* Translate each blast in the direction it's headed */
-void translate_blast(Blast **headBlast, Asteroid **asteroids, Display gameDisplay, int *currentScore);
+void translate_blast(Blast **headBlast, Asteroid **asteroids, Display gameDisplay, int *currentScore, int currentAsteroids);
 
 /* Add another blast! */
 void add_blast(Spaceship ship, Blast **headBlast);
@@ -72,7 +72,7 @@ void split_in_half(Asteroid **originalAsteroid);
 void rotate_asteroid(Asteroid **headAsteroid);
 
 /* Translate each asteroid in the same direction, which is defined in the direction property */
-void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids);
+void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids, int currentScore);
 
 /* Create a new asteroid around a specific centerOfRotation point */
 Asteroid* create_new_asteroid(float (*centerOfRotation)[1], float direction);
@@ -82,7 +82,7 @@ Asteroid* create_new_asteroid(float (*centerOfRotation)[1], float direction);
  */
 
 /* Check for collision between each blast and asteroid on screen */
-bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids, int *currentScore);
+bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids, int *currentScore, int currentAsteroids);
 
 /**
  * Free Memory

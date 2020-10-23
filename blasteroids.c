@@ -148,8 +148,8 @@ int main()
              * The game's logic is calculated here exactly every 1/60th of a second (60 ticks per sec)
              */
             rotate_asteroid(&headAsteroid);
-            translate_asteroid(&headAsteroid, gameDisplay, &currentAsteroids);
-            translate_blast(&headBlast, &headAsteroid, gameDisplay, &currentScore);
+            translate_asteroid(&headAsteroid, gameDisplay, &currentAsteroids, currentScore);
+            translate_blast(&headBlast, &headAsteroid, gameDisplay, &currentScore, currentAsteroids);
             sprintf(scoreInfo, "Score: %i", currentScore);
             sprintf(lifeInfo, "Remaining Lives: %i", currentLives);
             sprintf(asteroidsInfo, "Number of Asteroids: %i", currentAsteroids);
