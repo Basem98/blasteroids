@@ -141,7 +141,6 @@ bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids, int *currentSc
         }
         else if ((*currentScore += 10) && currentAsteroids < 10)
         {
-            *currentScore += 50;
             append_asteroid(&currAst);
         }
 
