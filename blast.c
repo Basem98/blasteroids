@@ -23,7 +23,7 @@ void draw_blasts(Blast *headBlast)
     draw_blasts(headBlast->next);
 }
 
-void translate_blast(Blast **headBlast, Asteroid **asteroids, Display gameDisplay, int *currentScore)
+void translate_blast(Blast **headBlast, Asteroid **asteroids, Display gameDisplay, int *currentScore, int currentAsteroids)
 {
     if (*headBlast == NULL)
         return;
@@ -35,7 +35,7 @@ void translate_blast(Blast **headBlast, Asteroid **asteroids, Display gameDispla
     {
         BlastData *curData = cur->data;
         /* Check if any collision happened between the blast and any of the display's edges, or any collision with the asteroids */
-        if (((curData->body[0][1] < 0 || curData->body[0][1] > gameDisplay.width) || (curData->body[1][1] < 0 || curData->body[1][1] > gameDisplay.height)) || (blast_asteroid_coll(&cur, asteroids, currentScore)))
+        if (((curData->body[0][1] < 0 || curData->body[0][1] > gameDisplay.width) || (curData->body[1][1] < 0 || curData->body[1][1] > gameDisplay.height)) || (blast_asteroid_coll(&cur, asteroids, currentScore, currentAsteroids)))
         {
             Blast *nextBlast = cur->next;
             if (prev != NULL)
@@ -102,7 +102,7 @@ void add_blast(Spaceship ship, Blast **headBlast)
     *currentBlast = newBlast;
 }
 
-bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids, int *currentScore)
+bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids, int *currentScore, int currentAsteroids)
 {
     if (*currBlast == NULL || *asteroids == NULL)
         return false;
@@ -139,7 +139,7 @@ bool blast_asteroid_coll(Blast **currBlast, Asteroid **asteroids, int *currentSc
         {
             split_in_half(&currAst);
         }
-        else
+        else if ((*currentScore += 10) && currentAsteroids < 10)
         {
             *currentScore += 50;
             append_asteroid(&currAst);
