@@ -18,6 +18,7 @@ Unfortunately, the game only works on Linux distros. You can clone the repositor
 and write down these commands:
 
 > make blasteroids
+>
 > ./blasteroids
 
 ## How does it work?
