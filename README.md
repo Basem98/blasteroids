@@ -14,7 +14,7 @@ such as Memory Management, Game Loops, 2D Transformations in computational graph
 the necessary debugging skills to debug syntax, runtime, logic and behavourial errors using important C tools (mainly Valgrind, AddressSanitizer and GDB).
 
 ## How to play it?
-Unfortunately, the game only works on Linux distros. You can clone the repository, or download the folder, then go the directory where you saved it in,
+Unfortunately, the game only works on Linux distros. You can clone the repository, or download the folder, then go to the directory where you saved it,
 and write down these commands:
 
 > make blasteroids
