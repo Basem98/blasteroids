@@ -18,6 +18,13 @@ the necessary debugging skills to debug syntax, runtime, logic and behavourial e
 * Use the upper arrow key to move the ship in the direction it's directed at
 * Use the space bar to fire your blasts!
 
+## What are the rules?
+It's as basic as this; You will start the game with 1 asteroid, what will you do? Obviously BLAST it! Then this asteroid will split into 2,
+those 2 will be more vulnerable and can be one shot. Whenever you completely destroy an asteroid, a new one will respawn at one of the 4 corners of the display.
+The more asteroids you kill, the higher your score can get and the quicker those asteroids will move. Each new asteroid will split into two
+when it's hit for the first time, then the resault will be more vulnerable asteroid, which can be one shot. There's no consequences in the game yet, i.e.,
+the asteroids cannot kill you. It's just you and some asteroid who can get REALLY QUICK!
+
 ## What does the game lack so far?
 1. There's no collision detection between the asteroids and the ship yet
 2. The game only works on linux so far
