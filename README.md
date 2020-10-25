@@ -13,6 +13,13 @@ has taught me a lot of very valuable skills as a programmer in general,
 such as Memory Management, Game Loops, 2D Transformations in computational graphics as well as
 the necessary debugging skills to debug syntax, runtime, logic and behavourial errors using important C tools (mainly Valgrind, AddressSanitizer and GDB).
 
+## How to play it?
+Unfortunately, the game only works on Linux distros. You can clone the repository, or download the folder, then go the directory where you saved it in,
+and write down these commands:
+
+> make blasteroids
+> ./blasteroids
+
 ## How does it work?
 * Use right and left arrow keys to rotate the ship
 * Use the upper arrow key to move the ship in the direction it's directed at
