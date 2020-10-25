@@ -82,7 +82,7 @@ int main()
     /* Player Info */
     int currentScore = 0;
     char scoreInfo[100];
-    int currentLives = 3;
+    float currentSpeed = 0.5;
     char lifeInfo[100];
     int currentAsteroids = 1;
     char asteroidsInfo[100];
@@ -148,10 +148,10 @@ int main()
              * The game's logic is calculated here exactly every 1/60th of a second (60 ticks per sec)
              */
             rotate_asteroid(&headAsteroid);
-            translate_asteroid(&headAsteroid, gameDisplay, &currentAsteroids, currentScore);
+            translate_asteroid(&headAsteroid, gameDisplay, &currentAsteroids, &currentSpeed, currentScore);
             translate_blast(&headBlast, &headAsteroid, gameDisplay, &currentScore, currentAsteroids);
             sprintf(scoreInfo, "Score: %i", currentScore);
-            sprintf(lifeInfo, "Remaining Lives: %i", currentLives);
+            sprintf(lifeInfo, "Current Speed Of Asteroids: %f", currentSpeed);
             sprintf(asteroidsInfo, "Number of Asteroids: %i", currentAsteroids);
 
             reRender = true;

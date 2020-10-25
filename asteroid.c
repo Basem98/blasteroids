@@ -164,6 +164,7 @@ void add_dup_asteroid(Asteroid **originalAsteroid, Display gameDisplay)
     Asteroid *newAsteroid = create_new_asteroid(dupeCenterOfRotation, direction);
     curr->data->hasBeenDuped = true;
     newAsteroid->data->isDupe = true;
+    newAsteroid->data->isHit = curr->data->isHit;
 
     newAsteroid->next = curr->next;
     curr->next = newAsteroid;
@@ -192,7 +193,7 @@ void split_in_half(Asteroid **originalAsteroid)
     curr->next = firstAst;
 }
 
-void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids, int currentScore)
+void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids, float *currentSpeed, int currentScore)
 {
     if (headAsteroid == NULL || *headAsteroid == NULL)
         return;
@@ -201,6 +202,7 @@ void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *curre
     Asteroid *prev = NULL;
     int numOfAsteroids = 0;
     float speed = currentScore / 250.0 < 1.0 ? 1.0 : currentScore / 250.0;
+    *currentSpeed = speed;
     while (curr != NULL)
     {
         bool isCompletelyOnScreen = true;

@@ -72,7 +72,7 @@ void split_in_half(Asteroid **originalAsteroid);
 void rotate_asteroid(Asteroid **headAsteroid);
 
 /* Translate each asteroid in the same direction, which is defined in the direction property */
-void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids, int currentScore);
+void translate_asteroid(Asteroid **headAsteroid, Display gameDisplay, int *currentAsteroids, float *currentSpeed, int currentScore);
 
 /* Create a new asteroid around a specific centerOfRotation point */
 Asteroid* create_new_asteroid(float (*centerOfRotation)[1], float direction);
